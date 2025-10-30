@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        # Use npm ci when a lockfile exists for deterministic installs.
+        # If there's no lockfile but package.json exists, fall back to npm install.
+        if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+          echo "Found lockfile, running npm ci"
+          npm ci
+        elif [ -f package.json ]; then
+          echo "No lockfile found, running npm install"
+          npm install
+        else
+          echo "No package.json found — skipping Node install and failing the job"
+          echo "If this repo is not a Node project remove or guard Node steps in .github/workflows/ci.yml"
+          exit 1
+        fi
