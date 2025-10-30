@@ -70,6 +70,8 @@ def padic_valuation(n: int, p: int) -> int:
     Compute the p-adic valuation of n.
     Returns the largest power of p that divides n.
     """
+    if p <= 1:
+        raise ValueError("Prime p must be greater than 1")
     if n == 0:
         return float('inf')
     
@@ -86,6 +88,8 @@ def padic_norm(n: int, p: int) -> float:
     Compute the p-adic norm of n.
     Returns p^(-v_p(n)) where v_p(n) is the p-adic valuation.
     """
+    if p <= 1:
+        raise ValueError("Prime p must be greater than 1")
     if n == 0:
         return 0.0
     
@@ -99,6 +103,14 @@ def padic_expansion(numerator: int, denominator: int, prime: int = 5, terms: int
     Returns a list of coefficients [a_0, a_1, a_2, ...] where
     numerator/denominator = a_0 + a_1*p + a_2*p^2 + ...
     """
+    # Validate inputs
+    if prime <= 1:
+        raise ValueError("Prime must be greater than 1")
+    if terms <= 0:
+        raise ValueError("Number of terms must be positive")
+    if denominator == 0:
+        raise ValueError("Denominator cannot be zero")
+    
     # Normalize the fraction
     gcd = math.gcd(abs(numerator), abs(denominator))
     numerator //= gcd
@@ -187,6 +199,14 @@ class PadicNumber:
         """
         Initialize a p-adic number from a rational number.
         """
+        # Validate inputs
+        if denominator == 0:
+            raise ValueError("Denominator cannot be zero")
+        if prime <= 1:
+            raise ValueError("Prime must be greater than 1")
+        if terms <= 0:
+            raise ValueError("Number of terms must be positive")
+        
         self.prime = prime
         self.terms = terms
         
