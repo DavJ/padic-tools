@@ -56,6 +56,7 @@ Validation commands
    python -m pytest
    python -m sphinx -W --keep-going -b html docs docs/_build/html
    python -m sphinx -W --keep-going -b doctest docs docs/_build/doctest
+   python scripts/build_manual.py
    python -m build
    python -m twine check dist/*
 
@@ -64,3 +65,10 @@ Python-version matrix, package builds and installation of the wheel with no
 optional dependencies. The first release should additionally be compared
 with Sage/PARI on matched conventions; the optional oracle test can run when
 the ``gp`` executable is available.
+
+The portable manual builder assembles the chapters into one file, embeds
+styles and pre-renders formulas to native MathML using Node.js at build time.
+It removes controls that depend on other files and validates every delivered
+internal link. The resulting HTML can be read without JavaScript or network
+access. Keep the complete directory together for the ordinary multi-page
+edition; a link to only its index is not a portable manual.

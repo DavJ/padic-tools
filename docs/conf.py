@@ -11,7 +11,13 @@ extensions = [
     "sphinx.ext.viewcode", "sphinxcontrib.katex",
 ]
 html_theme = "alabaster"
-html_theme_options = {"description": "p-adic analysis · exact algebra · explicit bridges", "fixed_sidebar": True}
+html_theme_options = {
+    "description": "p-adic analysis · exact algebra · explicit bridges",
+    "fixed_sidebar": True,
+    "sidebar_includehidden": False,
+}
+templates_path = ["_templates"]
+html_show_sourcelink = False
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 exclude_patterns = ["_build"]

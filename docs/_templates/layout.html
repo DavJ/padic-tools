@@ -1,0 +1,14 @@
+{% extends "!layout.html" %}
+
+{% block relbar_top %}
+<div class="doc-toolbar">
+<nav class="language-switch" aria-label="Documentation language">
+  <a href="{{ pathto(root_doc) }}" lang="en" hreflang="en"
+     title="English documentation"{% if pagename != 'cesky' %} aria-current="page"{% endif %}>English</a>
+  <span aria-hidden="true">·</span>
+  <a href="{{ pathto('cesky') }}" lang="cs" hreflang="cs"
+     title="Český průvodce"{% if pagename == 'cesky' %} aria-current="page"{% endif %}>Čeština</a>
+</nav>
+</div>
+{{ super() }}
+{% endblock %}

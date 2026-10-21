@@ -32,3 +32,18 @@ does not claim those remote jobs have already passed.
 These checks support the documented 0.1 scope; they do not establish formal
 verification, a general complex/p-adic analytic comparison theorem, a full
 extension-field engine, or production performance guarantees.
+
+## Portable documentation repair
+
+The documentation now includes a reproducible single-file HTML edition with
+embedded styles and pre-rendered MathML. Its builder validates all **222
+internal anchors**, removes controls requiring companion pages, and checks the
+English/Czech guide targets. CI builds and uploads this edition separately.
+
+Validated in Chromium 150 with network access and JavaScript disabled at
+1440x1000 and 390x844: English/Czech navigation, return to the English start,
+and chapter navigation worked; all 12 formulas were native MathML. The normal
+multi-page edition's English/Czech links also worked from its complete local
+directory. Both Sphinx HTML builds completed without warnings and all 84
+documentation examples passed. The source distribution includes the custom
+language-navigation template and portable manual builder.

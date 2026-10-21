@@ -73,6 +73,24 @@ an API reference, mathematical derivations, executable examples, a feature
 roadmap and links to primary sources. CI uploads the generated HTML manual as
 the `html-documentation` artifact; it does not publish a website.
 
+For sharing or opening a single file, build the portable manual instead:
+
+```bash
+python scripts/build_manual.py
+```
+
+Open **docs/_build/padic-tools-manual.html**. This file includes every chapter,
+its styles and pre-rendered mathematical formulas. Chapter and language links
+stay inside the file, so it works offline without companion files or
+JavaScript. Building this portable edition additionally requires Node.js;
+reading it does not. CI uploads it as `portable-html-manual`.
+
+The regular multi-page HTML edition must be served as a complete directory
+or opened from the full downloaded `html-documentation` archive. Sharing
+only its `index.html` loses the other pages and assets. Both editions provide
+a separate **English · Čeština** language navigation bar; the Czech guide
+is kept out of the English chapter menu.
+
 Start with [the Czech guide](docs/cesky.rst),
 [the numerical tutorial](docs/tutorial.rst),
 [the special-function definitions](docs/functions.rst), and
