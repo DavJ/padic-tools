@@ -1,0 +1,13 @@
+:root{--ink:#19314c;--accent:#087e8b;--paper:#f6f8fa}
+body{color:var(--ink);background:var(--paper)}
+div.document{max-width:1180px;width:auto;margin:28px auto;background:white;padding:24px 28px;border-radius:12px;box-shadow:0 5px 24px #19314c0d}
+div.body{max-width:860px;font-family:system-ui,-apple-system,sans-serif;line-height:1.65;font-size:16px}
+div.body h1,div.body h2,div.body h3{font-family:system-ui,-apple-system,sans-serif;color:var(--ink)}
+a{color:var(--accent)}
+pre{padding:16px;border:1px solid #dce5ec;border-radius:8px;line-height:1.5}
+table.docutils{border-collapse:collapse;width:100%;font-size:14px}
+table.docutils td,table.docutils th{padding:10px;border:1px solid #dce5ec}
+div.admonition{border-radius:8px;border:1px solid #b8dce0;background:#f0f9fa}
+.sphinxsidebar{font-family:system-ui,-apple-system,sans-serif}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:8px 0}
+@media(max-width:875px){div.document{margin:0;padding:12px;border-radius:0}div.body{padding:12px}}

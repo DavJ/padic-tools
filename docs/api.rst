@@ -1,0 +1,45 @@
+API reference
+==============
+
+Core numbers
+------------
+
+.. automodule:: padic_tools.core
+   :members:
+   :undoc-members:
+
+Analytic functions
+------------------
+
+.. automodule:: padic_tools.analytic
+   :members:
+
+Special functions
+-----------------
+
+.. automodule:: padic_tools.special
+   :members:
+
+Exact symbolic layer
+--------------------
+
+.. automodule:: padic_tools.symbolic
+   :members:
+
+Optional SymPy adapter
+----------------------
+
+.. automodule:: padic_tools.sympy_bridge
+   :members:
+
+Scalar-generic algebras
+-----------------------
+
+.. automodule:: padic_tools.algebra
+   :members:
+
+Explicit bridges
+----------------
+
+.. automodule:: padic_tools.bridges
+   :members:
