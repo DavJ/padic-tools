@@ -114,6 +114,40 @@ se liší od počtu známých p-adických číslic. Podrobnosti najdeš v
 :doc:`kapitole o omezených mírách <measures>` a
 :doc:`kapitole o jejich Mellinově transformaci <mellin>`.
 
+Harmonická analýza na Qp
+------------------------
+
+``additive_phase`` vrací přesnou fázi p-adického aditivního charakteru.
+Jeho komplexní hodnota ``additive_character`` je uložena jako přesný kořen
+jednotky; ``.complex(dps=...)`` jej samostatně numericky vyčíslí.
+Například p-adická zlomková část čísla 1/6 je pro p=3 rovna 2/3.
+
+``PadicTestFunction`` zadává celou lokálně konstantní funkci s kompaktním
+nosičem pomocí hodnot na konečném počtu tříd. Počítá přesný Haarův integrál,
+Fourierovu transformaci, inverzi, skalární součin a konvoluci. Používá reálnou
+Haarovu míru s objemem Zp rovným jedné. Tato integrace má jiný obor hodnot
+než výše popsané p-adické míry. Nosič a mřížka konstantnosti se při Fourierově
+transformaci přesně zamění za duální mřížky; knihovna uchovává i tyto údaje.
+
+.. doctest::
+
+   >>> K = Qp(3, 18)
+   >>> additive_phase(Fraction(1, 6), K)
+   Fraction(2, 3)
+   >>> funkce = PadicTestFunction(K, [1, 2, 4])
+   >>> funkce.integral().as_fraction()
+   Fraction(7, 3)
+   >>> spektrum = funkce.fourier()
+   >>> spektrum.fourier(inverse=True) == funkce
+   True
+   >>> spektrum.norm_squared() == funkce.norm_squared()
+   True
+
+Zdrojem hodnot jsou racionální čísla a přesné kombinace p-mocninových kořenů
+jednotky. U této třídy funkcí jde o konečný přesný výpočet integrálu.
+Omezení počtu tříd a řádu kořene vyvolá výslovnou chybu; detaily, znaménka,
+normalizaci i odvození najdeš v :doc:`kapitole o harmonické analýze <harmonic>`.
+
 Jak funguje bridge
 ------------------
 

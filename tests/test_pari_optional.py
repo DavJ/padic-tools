@@ -8,7 +8,7 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, Qp, RationalAmiceMeasure, exp, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, Qp, RationalAmiceMeasure, exp, finite_fourier, log, taylor, zeta_p
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
@@ -89,3 +89,26 @@ def test_nonatomic_mellin_against_pari_kl_identity(p):
     value = mu.mellin(Fraction(1,2),branch=p-2)
     assert value.precision == 14
     assert value.contains(Fraction(result.stdout.strip()))
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,n", [(2,4),(3,9),(5,5)])
+def test_exact_fourier_complex_place_against_pari(p,n):
+    mp = pytest.importorskip("mpmath")
+    script = (
+        "default(realprecision,90);\n"
+        f"N={n};\n"
+        "for(k=0,N-1,z=sum(j=0,N-1,(j^2-2*j+3)*exp(-2*Pi*I*j*k/N))/N;"
+        "print(real(z));print(imag(z)))\nquit\n"
+    )
+    result = subprocess.run(["gp","-q","-f"],input=script,text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = result.stdout.splitlines()
+    assert len(oracle) == 2*n
+    ctx = mp.mp.clone(); ctx.dps = 85
+    values = finite_fourier([j*j-2*j+3 for j in range(n)],p)
+    for k,value in enumerate(values):
+        reference = ctx.mpc(ctx.mpf(oracle[2*k].replace(" ","")),
+                            ctx.mpf(oracle[2*k+1].replace(" ","")))
+        assert abs(value.complex(80)-reference) < ctx.mpf("1e-74")

@@ -41,6 +41,15 @@ Taylor expansions
 .. automodule:: padic_tools.taylor
    :members:
 
+Harmonic analysis
+------------------
+
+.. autoclass:: padic_tools.harmonic.CyclotomicValue
+   :members:
+
+.. automodule:: padic_tools.harmonic
+   :members:
+
 Optional SymPy adapter
 ----------------------
 

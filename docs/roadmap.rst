@@ -30,6 +30,9 @@ Implemented
   exp/log/log1p/sin/cos.
 * Rational/Gaussian diagonal bridges, selected split places, quaternion and
   biquaternion scalar base changes, and an explicit even-Clifford isomorphism.
+* Exact additive characters, real Haar volumes/integration, finite Fourier
+  transforms and compactly supported locally constant functions on Qp with
+  rational/cyclotomic source values; exact inversion, Parseval and convolution.
 * A source-linked HTML guide and executable examples.
 
 Next mathematical features
@@ -52,9 +55,10 @@ Next mathematical features
 7. Arbitrary bounded-measure coefficient oracles and justified inverse
    transforms. For a user-supplied general Mahler prefix, integration still
    requires a caller-supplied uniform bound for omitted coefficients.
-8. Harmonic analysis of complex-valued functions on Qp: additive characters,
-   Haar integration, finite Fourier transforms, Kozyrev wavelets and
-   Vladimirov operators. Keep this integration setting explicit.
+8. Kozyrev wavelets, Vladimirov operators, multidimensional harmonic grids,
+   accelerated Fourier backends and more general complex source coefficients.
+   Preserve the distinction between exact finite test functions and a
+   controlled approximation to an arbitrary function on Qp.
 
 Research applications
 ----------------------
