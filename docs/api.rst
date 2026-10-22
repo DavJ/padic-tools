@@ -26,6 +26,18 @@ Exact symbolic layer
 .. automodule:: padic_tools.symbolic
    :members:
 
+Measures and transforms
+-----------------------
+
+.. automodule:: padic_tools.transforms
+   :members:
+
+Taylor expansions
+------------------
+
+.. automodule:: padic_tools.taylor
+   :members:
+
 Optional SymPy adapter
 ----------------------
 

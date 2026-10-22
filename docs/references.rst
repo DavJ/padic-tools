@@ -19,6 +19,13 @@ presented as establishing a new complex/p-adic zero correspondence.
   <https://warwick.ac.uk/fac/sci/maths/people/staff/cwilliams/lecturenotes/lecture_notes_part_i.pdf>`_
   — the KL construction, special-value interpolation and character variables;
   see Theorem 3.12 and section 4.3.
+  Sections 2.2--2.4 also describe the measure/series correspondence,
+  binomial moments and Dirac measures used in :doc:`transforms`.
+* `Mathlib: The Amice transform
+  <https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Measure/AmiceTransform.html>`_
+  — the formal definition and coefficient identity for the Amice transform;
+  consulting this reference is not a claim that our Python algorithms have
+  been formally verified in Lean.
 * `Lai, Lupu and Sprang: On the irrationality of certain p-adic zeta values
   <https://link.springer.com/article/10.1007/s40687-025-00559-x>`_
   — sections 2.1–2.3 recall Volkenborn moments and Teichmüller/Hurwitz

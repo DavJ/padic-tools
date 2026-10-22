@@ -7,6 +7,8 @@ from .core import DomainError, Padic, PadicField, PrecisionError, Qp, exact, val
 from .analytic import cos, exp, log, log1p, power, sin, sqrt, teichmuller
 from .special import bernoulli, theta3, theta4, zeta_euler_value, zeta_p, zeta_special
 from .symbolic import Polynomial, PowerSeries, exp_series, hensel_lift, log1p_series, theta3_series
+from .transforms import AtomicMeasure
+from .taylor import TaylorExpansion, taylor
 from .algebra import (
     Biquaternions, CliffordAlgebra, Gaussian, Hamilton, Multivector,
     QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra,
@@ -19,6 +21,7 @@ __all__ = [
     "exp", "log", "log1p", "sin", "cos", "sqrt", "power", "teichmuller",
     "bernoulli", "theta3", "theta4", "zeta_special", "zeta_euler_value", "zeta_p",
     "Polynomial", "PowerSeries", "hensel_lift", "exp_series", "log1p_series", "theta3_series",
+    "AtomicMeasure", "TaylorExpansion", "taylor",
     "QuadraticAlgebra", "QuadraticElement", "Gaussian", "QuaternionAlgebra", "Quaternion",
     "Hamilton", "Biquaternions", "CliffordAlgebra", "Multivector",
     "RationalBridge", "GaussianBridge", "QuaternionBridge", "riemann_zeta",
