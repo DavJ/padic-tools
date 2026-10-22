@@ -127,11 +127,13 @@ the finite polynomial evaluation and also propagates input uncertainty.
 Scope and sources
 -----------------
 
-This implementation covers finite atomic measures with rational source
-data. General bounded measures, their Mahler-coefficient tail contracts,
-non-atomic rational Amice measures, and transform inverses remain future
-extensions. Qp-valued bounded measures and the real Haar measure used for
-complex-valued harmonic analysis are separate integration settings.
+``AtomicMeasure`` covers finite atomic measures with rational source data.
+``RationalAmiceMeasure`` additionally supports measures specified by a
+complete rational Amice transform, exact moments, local Laplace evaluation
+and integration of Mahler prefixes with explicit tail contracts; see
+:doc:`measures`. General bounded measures and transform inverses remain
+future extensions. Qp-valued bounded measures and the real Haar measure
+used for complex-valued harmonic analysis are separate integration settings.
 
 For the measure/series correspondence, Dirac measures and Mellin characters,
 see Rodrigues Jacinto and Williams, sections 2.2--2.4 and 4.3, linked in

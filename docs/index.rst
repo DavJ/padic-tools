@@ -45,6 +45,7 @@ across packages: the prime, branch and Euler factor must match.
    Precision <precision>
    Special functions <functions>
    Integral transforms <transforms>
+   Bounded measures <measures>
    Taylor expansions <taylor>
    Symbolic algebra <symbolic>
    Algebraic bridges <bridges>

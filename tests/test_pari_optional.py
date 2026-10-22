@@ -8,7 +8,7 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, Qp, exp, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, Qp, RationalAmiceMeasure, exp, log, taylor, zeta_p
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
@@ -48,3 +48,26 @@ def test_transforms_and_taylor_against_pari(p):
     for value,reference in zip(values,oracle):
         assert value.precision >= 11
         assert value.contains(reference)
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,c", [(2,3),(3,2),(5,2)])
+def test_rational_measure_laplace_and_moments_against_pari(p,c):
+    mu = RationalAmiceMeasure(Qp(p,14),[Fraction(1,p)],[c,1])
+    script = (
+        f"print(lift(1/({p}*({c}+exp(-{p*p}+O({p}^32))-1))));\n"
+        f"f=1/({p}*({c}+exp(-x+O(x^10))-1));\n"
+        "for(n=0,8,print(polcoef(f,n)))\nquit\n"
+    )
+    result = subprocess.run(["gp","-q","-f"],input=script,text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 10
+    value = mu.laplace(p*p)
+    assert value.precision >= 14
+    assert value.contains(oracle[0])
+    assert mu.laplace_series(9).coefficients == tuple(oracle[1:])
+    from math import factorial
+    for n,c in enumerate(oracle[1:]):
+        assert mu.moment(n) == (-1)**n*factorial(n)*c
