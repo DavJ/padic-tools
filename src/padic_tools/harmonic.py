@@ -243,9 +243,32 @@ class PadicTestFunction:
 
     __rmul__ = __mul__
 
+    def __neg__(self):
+        return self._replace_values(-value for value in self.values)
+
     def __add__(self, other):
         self._check(other)
         return self._replace_values(a+b for a,b in zip(self.values,other.values))
+
+    def __sub__(self, other):
+        return self+-other
+
+    def on_lattice(self, *, support_exponent=None, constancy_exponent=None, max_size=4096):
+        """Exactly enlarge the support container and/or refine the cosets.
+
+        Requires new a<=old a and new b>=old b. This represents the same
+        function on all Q_p; it introduces no interpolation or tail error.
+        """
+        a = self.support_exponent if support_exponent is None else support_exponent
+        b = self.constancy_exponent if constancy_exponent is None else constancy_exponent
+        if type(a) is not int or type(b) is not int:
+            raise TypeError("lattice exponents must be integers")
+        if a > self.support_exponent or b < self.constancy_exponent:
+            raise DomainError("on_lattice requires an enlarged container and finer cosets")
+        size = _size(self.field.p,b-a,max_size)
+        step = p_power(self.field.p,a)
+        return type(self)(self.field,(self(step*j) for j in range(size)),
+                          support_exponent=a,constancy_exponent=b,max_size=max_size)
 
     def reflect(self):
         """The exact function x -> self(-x)."""

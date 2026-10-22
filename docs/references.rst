@@ -42,6 +42,16 @@ presented as establishing a new complex/p-adic zero correspondence.
   — cyclotomic fields and their chosen complex embeddings. The native
   harmonic coefficient ring implements rational combinations of p-power
   roots; it does not provide general number-field arithmetic.
+* `Kozyrev: Wavelet analysis as a p-adic spectral analysis
+  <https://arxiv.org/html/math-ph/0012019v3>`_
+  — the wavelet eigenbasis and Vladimirov kernel/multiplier convention.
+  Our opposite Fourier sign, reversed scale and amplitude-one normalization
+  are stated in :doc:`wavelets`.
+* `Bikulov and Zubarev: On one real basis for L2(Qp)
+  <https://arxiv.org/abs/1504.03624>`_
+  — compact-ball Fourier analysis and the regional integral, distinct from
+  the whole-space derivative of a zero extension. Our sign, kernel constant
+  and escape-rate derivation appear in :doc:`wavelets`.
 * `Mathlib: The Amice transform
   <https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Measure/AmiceTransform.html>`_
   — the formal definition and coefficient identity for the Amice transform;

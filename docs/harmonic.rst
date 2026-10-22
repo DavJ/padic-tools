@@ -140,7 +140,9 @@ coset value; it never fills an unspecified tail with zeros.
 on two test functions, including pointwise products, inner products and
 convolution, require the same prime and the same two lattice exponents.
 ``translate(t)`` represents f(x-t) for t inside the support container;
-``reflect()`` represents f(-x). More general lattice alignment is future work.
+``reflect()`` represents f(-x). ``on_lattice`` exactly enlarges the container
+and/or refines the cosets; coarsening is rejected. Subtraction and negation
+are supported on a common lattice.
 
 Fourier transform and its normalization
 ---------------------------------------
@@ -238,7 +240,8 @@ and Haar conventions follow Tao's p-adic discussion; Kedlaya gives the
 general duality and inversion context. Both sources are in :doc:`references`.
 
 This foundation supports finite prime-sector spectra and wave packets.
-Kozyrev wavelets, Vladimirov operators, multidimensional grids and general
+Kozyrev bases, whole-Qp Vladimirov images and conservative ball diffusion
+are described in :doc:`wavelets`. Multidimensional grids and general
 complex sample coefficients remain subsequent extensions. Applying the
 API to a function outside its declared class requires a separate error
 estimate for the chosen approximation.

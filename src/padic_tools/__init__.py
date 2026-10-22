@@ -14,6 +14,8 @@ from .harmonic import (
     CyclotomicValue, PadicTestFunction, additive_character, additive_phase,
     finite_fourier, haar_volume,
 )
+from .wavelets import KozyrevBasis, kozyrev_wavelet
+from .operators import BallVladimirov, DiffusionState, VladimirovImage, vladimirov
 from .algebra import (
     Biquaternions, CliffordAlgebra, Gaussian, Hamilton, Multivector,
     QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra,
@@ -29,6 +31,8 @@ __all__ = [
     "AtomicMeasure", "RationalAmiceMeasure", "TaylorExpansion", "taylor",
     "CyclotomicValue", "PadicTestFunction", "additive_character", "additive_phase",
     "finite_fourier", "haar_volume",
+    "KozyrevBasis", "kozyrev_wavelet", "BallVladimirov", "DiffusionState",
+    "VladimirovImage", "vladimirov",
     "QuadraticAlgebra", "QuadraticElement", "Gaussian", "QuaternionAlgebra", "Quaternion",
     "Hamilton", "Biquaternions", "CliffordAlgebra", "Multivector",
     "RationalBridge", "GaussianBridge", "QuaternionBridge", "riemann_zeta",

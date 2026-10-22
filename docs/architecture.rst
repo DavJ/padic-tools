@@ -21,6 +21,8 @@ Architecture and contribution guide
      - Exact measure data, bounded Amice transforms and certified local expansions
    * - ``harmonic``
      - Complex-place additive characters, real Haar integration and exact finite Fourier transforms
+   * - ``wavelets``, ``operators``
+     - Exact finite Kozyrev bases, whole-Qp derivatives with analytic tails, regional ball generators and numerical heat evolution
    * - ``algebra``
      - Scalar-generic quadratic, quaternion and diagonal Clifford algebras
    * - ``bridges``

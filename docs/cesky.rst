@@ -148,6 +148,36 @@ jednotky. U této třídy funkcí jde o konečný přesný výpočet integrálu.
 Omezení počtu tříd a řádu kořene vyvolá výslovnou chybu; detaily, znaménka,
 normalizaci i odvození najdeš v :doc:`kapitole o harmonické analýze <harmonic>`.
 
+Vlnky, Vladimirovův operátor a difuze
+-------------------------------------
+
+``KozyrevBasis`` poskytuje přesný ortogonální rozklad na konečné p-adické
+mřížce a jeho rekonstrukci. Vlnky mají amplitudu jedna; přesné normy jsou
+uložené zvlášť, takže normalizace nevyžaduje další odmocniny v oboru hodnot.
+
+``vladimirov(f, order=...)`` počítá derivaci na celém Qp pro kladný celý řád.
+U funkce s nenulovým integrálem uchovává i celý radiální ocas mimo původní
+nosič. ``BallVladimirov`` naopak integruje skoky uvnitř zvolené koule a jeho
+difuze zachovává hmotnost. Znaménka, únikový člen a odvození rozdílu obou
+operátorů najdeš v :doc:`kapitole o vlnkách a difuzi <wavelets>`.
+
+.. doctest::
+
+   >>> K = Qp(3, 18)
+   >>> baze = KozyrevBasis(K)
+   >>> signal = PadicTestFunction(K, [1, 2, 4])
+   >>> baze.reconstruct(baze.decompose(signal)) == signal
+   True
+   >>> vlnka = kozyrev_wavelet(K)
+   >>> vladimirov(vlnka).as_test_function() == vlnka*3
+   True
+
+Příklad ``python examples/padic_diffusion.py`` porovnává jemnější mřížku
+se stejnou funkcí a větší kouli s jinou hranicí. Vypisuje spektrum, chybu
+hmotnosti, minima hustoty a pokles L2 normy. Vyčíslení difuze používá
+komplexní numeriku s nastavenou pracovní přesností, zatímco báze a matice
+operátoru zůstávají přesné.
+
 Jak funguje bridge
 ------------------
 
