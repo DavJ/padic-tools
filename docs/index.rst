@@ -46,6 +46,7 @@ across packages: the prime, branch and Euler factor must match.
    Special functions <functions>
    Integral transforms <transforms>
    Bounded measures <measures>
+   Mellin of rational measures <mellin>
    Taylor expansions <taylor>
    Symbolic algebra <symbolic>
    Algebraic bridges <bridges>

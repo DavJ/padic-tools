@@ -129,9 +129,9 @@ Scope and sources
 
 ``AtomicMeasure`` covers finite atomic measures with rational source data.
 ``RationalAmiceMeasure`` additionally supports measures specified by a
-complete rational Amice transform, exact moments, local Laplace evaluation
-and integration of Mahler prefixes with explicit tail contracts; see
-:doc:`measures`. General bounded measures and transform inverses remain
+complete rational Amice transform, exact moments, local Laplace evaluation,
+exact unit restriction and Mellin evaluation with proved Mahler tails; see
+:doc:`measures` and :doc:`mellin`. General bounded measures and transform inverses remain
 future extensions. Qp-valued bounded measures and the real Haar measure
 used for complex-valued harmonic analysis are separate integration settings.
 

@@ -34,7 +34,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Analytic | exp, Iwasawa log with explicit log(p), log1p, sin, cos, principal-unit powers, square roots including p=2 |
 | Special functions | Multiplicative theta3, theta4 constants, exact Bernoulli/zeta values, numerical even KL zeta branches on Zp away from s=1 |
 | Symbolic | Rational polynomials, Euclidean division/gcd, formal series, composition/calculus, optional SymPy function nodes/evaluation |
-| Transforms | Exact atomic and bounded rational Amice measures, moments/polynomial integration, branched atomic Mellin, local Laplace, Amice evaluation and additive convolution |
+| Transforms | Exact atomic and bounded rational Amice measures, moments/polynomial integration, unit restriction, certified branched Mellin, local Laplace, Amice evaluation and additive convolution |
 | Taylor | Exact polynomial shifts and rational jets; local p-adic exp/log/log1p/sin/cos and polynomial expansions with whole-tail enclosures |
 | Algebraic bridges | Q and Q[i] to independent completions, chosen split Gaussian places, rational/p-adic quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
@@ -54,13 +54,20 @@ assert jet(K(10)).is_congruent(exp(K(10)), precision=20)
 rational = RationalAmiceMeasure(K, [1], [2, 1])  # Complete A(T)=1/(2+T)
 assert rational.moment(3) == Fraction(1, 8)
 assert rational.laplace(K(5)).is_congruent(1/(1+exp(K(-5))))
+
+units = rational.restrict_units()  # Exact rational transform of the restriction
+assert units.moment(3) == Fraction(-31, 2)
+assert units.mellin(3, branch=3).contains(units.moment(3))
+assert units.mellin(Fraction(1, 2), branch=3).precision == 20
 ```
 
 The measure and kernel convention are explicit. Mellin support must lie in
 Zp units; Laplace checks the local p-adic exponential domain. Atomic measures
 are finite exact data. Rational Amice measures additionally describe complete
-bounded moment sequences with a checked coefficient bound. General Mellin
-evaluation for that class and transform inverses are future extensions.
+bounded moment sequences with a checked coefficient bound. Their Mellin
+evaluator proves an infinite Mahler-tail bound, including the dyadic case;
+`precision` requests an absolute output order and `max_terms` limits work.
+General bounded-measure oracles and transform inverses are future extensions.
 Formal series order and p-adic numerical precision are
 tracked separately; a numerical Taylor expansion includes its omitted tail.
 

@@ -136,9 +136,9 @@ correspondence, and the Bernoulli/zeta source there for the special values.
 Scope
 ------
 
-This class implements bounded rational Amice measures, not every bounded
-measure on Zp. General Mellin evaluation and restriction to units for this
-class, arbitrary coefficient oracles, and inverse transforms remain future
-work. ``AtomicMeasure.mellin`` continues to support finite unit measures.
+This class implements bounded rational Amice measures. Exact restriction
+to units and branched Mellin evaluation, including certified Mahler tails,
+are described in :doc:`mellin`. Arbitrary bounded-measure coefficient
+oracles and inverse transforms remain future work.
 The local Laplace domain here is the sufficient domain for all of Zp:
 ``v_p(t)>1/(p-1)``. Special support can justify wider domains in other APIs.
