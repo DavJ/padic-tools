@@ -203,8 +203,37 @@ kde se rozštěpí, i nad Q2, kde definuje rozvětvené rozšíření. Nerozvět
 kvadratické rozšíření Q2 lze místo toho zadat polynomem x^2+x+1.
 ``norm()`` vrací algebraickou normu do Qp; p-adickou absolutní hodnotu
 vrací ``absolute_value()``. Definice, odvození přesnosti a další příklady
-jsou v :doc:`kapitole o rozšířeních <extensions>`. Rozvětvený případ a nové
-adaptéry bridge jsou další samostatné kroky.
+jsou v :doc:`kapitole o rozšířeních <extensions>`.
+
+Rozvětvené Q2(i)
+-------------------------
+
+``Q2i`` používá bázi 1, pi, kde pi=1+i a pi^2-2*pi+2=0. Uniformizátorem
+je pi; jeho valuace je jedna, zatímco valuace čísla 2 je dvě.
+``base_valuation()`` vrací normalizaci s valuací dvojky rovnou jedné.
+Souřadnice zadávané do tohoto pole jsou v bázi 1, pi.
+
+.. doctest::
+
+   >>> L2i = Q2i(precision=12)
+   >>> pi = L2i.uniformizer()
+   >>> i = pi-1
+   >>> (i*i).is_congruent(-1)
+   True
+   >>> (pi.valuation(), L2i(2).valuation(), pi.base_valuation())
+   (1, 2, Fraction(1, 2))
+   >>> tuple(c.precision for c in L2i(1, 1, absprec=5).coefficients)
+   (3, 2)
+   >>> L2i.residue_field().order
+   2
+
+``absprec`` i přesnost výsledného prvku počítají mocniny pi. Výsledky
+normy a stopy mají naproti tomu přesnost v mocninách 2, protože leží v Q2.
+Obecnější ``EisensteinQuadraticField`` ověřuje Eisensteinův kvadratický
+polynom a funguje i nad lichými prvočísly. Odvození přesnosti, příklady
+se zápornou valuací a převod přesného gaussovského zdroje najdeš v
+:doc:`kapitole o rozvětvených polích <ramified>`. Dedikované adaptéry
+Gaussian a quaternion bridge jsou další samostatný krok.
 
 Jak funguje bridge
 ------------------
@@ -226,9 +255,9 @@ Nesnažíme se převádět konečný p-adický zbytek na údajnou komplexní apr
 Pro ``p=1 mod 4`` existují dvě volby obrazu i přímo v Qp. Pro ``p=3 mod 4``
 potřebujeme kvadratické rozšíření. Nový ověřený engine je popsaný výše;
 stávající metoda ``padic_algebra`` nadále vrací koeficientovou algebru.
-U p=2 je rozšíření rozvětvené a současná reprezentace neslibuje plnou
-aritmetiku s uniformizátorem. Kvadratická algebra je implementována ve všech
-těchto případech; rozlišení pole a rozštěpené algebry je podstatné.
+U p=2 je rozšíření rozvětvené a ``Q2i`` už poskytuje jeho vlastní polní
+aritmetiku s uniformizátorem. Metoda ``padic_algebra`` nadále vrací formální
+kvadratickou algebru. Rozlišení pole a rozštěpené algebry je podstatné.
 
 Geometrická algebra
 -------------------

@@ -19,6 +19,15 @@ presented as establishing a new complex/p-adic zero correspondence.
   <https://docs.magma-maths.org/LocalFields/PAdicRingsAndTheirExtensions/overview.html>`_
   — absolute precision in uniformizer units and its scaling by the
   ramification index when moving between local fields.
+* `Sage: Eisenstein Extension Generic
+  <https://doc.sagemath.org/html/en/reference/padics/sage/rings/padics/eisenstein_extension_generic.html>`_
+  — totally ramified extensions, the generator as uniformizer and the
+  unchanged residue field. Our quadratic valuation and trace/norm bounds
+  are derived in :doc:`ramified`.
+* `Sage: p-adic ZZ_pX CR elements
+  <https://doc.sagemath.org/html/en/reference/padics/sage/rings/padics/padic_ZZ_pX_CR_element.html>`_
+  — uniformizer-relative precision and the distinction between base and
+  ramified precision caps.
 * `NIST DLMF 20.2 <https://dlmf.nist.gov/20.2>`_
   — Jacobi theta definitions; our multiplicative argument convention is
   distinguished in :doc:`functions`.

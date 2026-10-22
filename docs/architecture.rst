@@ -13,6 +13,8 @@ Architecture and contribution guide
      - Local series, log branches, square roots and principal-unit powers
    * - ``extensions``
      - Certified unramified quadratic fields, common ideal-ball precision, exact quadratic residues and Frobenius
+   * - ``ramified``
+     - Eisenstein quadratic fields, weighted uniformizer bases, staggered coordinate precision and exact prime residues
    * - ``special``
      - Bernoulli values, theta series and explicit numerical KL branches
    * - ``symbolic``
@@ -36,10 +38,12 @@ constants are handled before finite precision conversion wherever possible.
 All extension points preserve the distinction between exact coefficients and
 approximate p-adic balls.
 
-The extension engine validates an integral power basis by irreducibility
-modulo p. Its valuation and norm bounds apply to unramified degree two;
-ramified bases need their own engine. Read :doc:`extensions` before adapting
-the scalar-generic algebras or analytic functions to a larger field.
+The two quadratic field engines share ideal-ball arithmetic, with certified
+basis weights and precision conversion supplied by their field classes.
+Unramified bases are validated by irreducibility modulo p; ramified bases
+by the Eisenstein criterion. Their valuations, residue degrees and norm/trace
+precision are different. Read :doc:`extensions` and :doc:`ramified` before
+adapting scalar-generic algebras or analytic functions to a larger field.
 
 The harmonic layer also uses only the standard library for its exact
 cyclotomic arithmetic. Its functions have rational/cyclotomic values in a

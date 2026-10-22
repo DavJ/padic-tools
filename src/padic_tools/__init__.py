@@ -11,6 +11,10 @@ from .extensions import (
     QuadraticResidueElement, QuadraticResidueField,
     UnramifiedQuadraticElement, UnramifiedQuadraticField,
 )
+from .ramified import (
+    EisensteinQuadraticElement, EisensteinQuadraticField,
+    PrimeResidueElement, PrimeResidueField, Q2i,
+)
 from .transforms import AtomicMeasure
 from .measures import RationalAmiceMeasure
 from .taylor import TaylorExpansion, taylor
@@ -34,6 +38,8 @@ __all__ = [
     "Polynomial", "PowerSeries", "hensel_lift", "exp_series", "log1p_series", "theta3_series",
     "UnramifiedQuadraticField", "UnramifiedQuadraticElement",
     "QuadraticResidueField", "QuadraticResidueElement",
+    "EisensteinQuadraticField", "EisensteinQuadraticElement", "Q2i",
+    "PrimeResidueField", "PrimeResidueElement",
     "AtomicMeasure", "RationalAmiceMeasure", "TaylorExpansion", "taylor",
     "CyclotomicValue", "PadicTestFunction", "additive_character", "additive_phase",
     "finite_fourier", "haar_volume",

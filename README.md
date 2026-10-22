@@ -1,4 +1,4 @@
-# padic-tools
+# padiclab
 
 A Python library for finite precision **p-adic analysis**, exact **symbolic
 algebra**, and explicit bridges to **complex numbers, quaternions,
@@ -7,6 +7,9 @@ biquaternions and Clifford algebras**.
 This is a usable **0.1 research library**, not a claim to implement every part
 of p-adic mathematics. Domains, precision bounds and remaining scope are
 documented. The numerical core uses only Python's standard library.
+
+Repository: [DavJ/padiclab](https://github.com/DavJ/padiclab).
+The current Python distribution is `padic-tools`, imported as `padic_tools`.
 
 ```bash
 python -m pip install .
@@ -31,7 +34,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Layer | Implemented in 0.1 |
 |---|---|
 | Numerical | Qp balls, valuations, digits, inverses, precision propagation, simple-root Hensel lifting |
-| Local fields | Certified unramified quadratic extensions, uniformizer p, ideal-ball precision, exact quadratic residue fields, norm/trace and lifted Frobenius |
+| Local fields | Certified unramified and Eisenstein quadratic extensions, Q3(i) and Q2(i), ideal-ball precision, exact residue fields and norm/trace; lifted Frobenius for unramified fields |
 | Analytic | exp, Iwasawa log with explicit log(p), log1p, sin, cos, principal-unit powers, square roots including p=2 |
 | Special functions | Multiplicative theta3, theta4 constants, exact Bernoulli/zeta values, numerical even KL zeta branches on Zp away from s=1 |
 | Symbolic | Rational polynomials, Euclidean division/gcd, formal series, composition/calculus, optional SymPy function nodes/evaluation |
@@ -62,8 +65,36 @@ irreducibility modulo p. `[1, 0, 1]` defines Q3(i); it is rejected over Q5
 quadratic extension of Q2. Each element is a whole ideal ball with common
 coordinate precision, including negative valuations. `norm()` is algebraic;
 `absolute_value()` is the p-adic magnitude. See [the extension chapter](docs/extensions.rst)
-for error bounds, exact residues and scope. Ramified fields, higher degrees,
-extension analytic functions and dedicated bridge adapters are subsequent steps.
+for error bounds, exact residues and scope. Higher degrees, extension
+analytic functions and dedicated bridge adapters are subsequent steps.
+
+## Ramified Q2(i) and Eisenstein fields
+
+```python
+from padic_tools import Q2i, EisensteinQuadraticField
+
+L2i = Q2i(precision=12)
+pi = L2i.uniformizer()  # pi = 1+i, with pi^2-2*pi+2 = 0
+i = pi-1
+assert (i*i).is_congruent(-1)
+assert pi.valuation() == 1 and L2i(2).valuation() == 2
+assert pi.base_valuation() == Fraction(1, 2)
+assert pi.norm().contains(2) and pi.trace().contains(2)
+assert L2i.residue_field().order == 2
+
+ball = L2i(1, 1, absprec=5)  # Precision is in powers of pi
+assert tuple(c.precision for c in ball.coefficients) == (3, 2)
+R = EisensteinQuadraticField(Qp(3, 12), [-3, 0, 1])
+assert (R.generator**2).is_congruent(3)
+```
+
+Coordinates use the basis `(1, pi)`. Odd and negative uniformizer precisions
+give staggered base-coordinate precisions. Norm and trace return Qp balls
+in base p units, with bounds that account for the different, including wild
+dyadic ramification. `absolute_value_squared()` gives the exact rational
+square of the base-compatible magnitude. See [the ramified chapter](docs/ramified.rst)
+for the derivation and explicit Gaussian source conversion. Dedicated
+bridge adapters and extension analytic functions remain later steps.
 
 ## Transforms and Taylor expansions
 

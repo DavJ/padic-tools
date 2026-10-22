@@ -15,6 +15,9 @@ Implemented
   common ideal-ball precision, uniformizer p, exact F_(p**2) residues,
   inverses, algebraic norm/trace and lifted Frobenius, including Q3(i)
   and the unramified quadratic extension of Q2.
+* Certified Eisenstein quadratic fields, including Q2(i) with pi=1+i,
+  weighted valuation, staggered Qp coordinate precision, exact prime
+  residues and different-aware norm/trace bounds at tame and wild primes.
 * Local exp/log/sin/cos, principal-unit powers, odd/dyadic square roots and
   simple-root Hensel lifting.
 * Multiplicative theta3 and theta4 constants with tail bounds.
@@ -48,10 +51,10 @@ Next mathematical features
 
 1. Broader independent Sage/PARI oracle coverage and performance baselines,
    particularly around KL branches and near poles.
-2. Ramified extensions beginning with Q2(i), dedicated Gaussian/quaternion
-   bridge adapters for local fields, and higher-degree unramified extensions.
-   Degree-two unramified fields already have their own valuation/precision
-   engine; formal quadratic coefficient algebras retain their wider scope.
+2. Dedicated Gaussian/quaternion bridge adapters for local fields,
+   higher-degree unramified/Eisenstein extensions and certified changes of
+   ramified power basis. Both degree-two field engines already propagate
+   ideal precision; formal coefficient algebras retain their wider scope.
 3. Singular Hensel lifting, general polynomial factorization, matrix solvers
    with condition-aware precision and optional accelerated arithmetic backends.
 4. General Dirichlet characters, the removable s=1 limits of nonprincipal

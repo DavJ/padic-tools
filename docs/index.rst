@@ -1,4 +1,4 @@
-padic-tools
+padiclab
 ===========
 
 Numerical p-adic analysis, exact symbolic algebra, and explicit algebraic
@@ -44,6 +44,7 @@ across packages: the prime, branch and Euler factor must match.
    Quick start <tutorial>
    Precision <precision>
    Unramified quadratic fields <extensions>
+   Ramified quadratic fields <ramified>
    Special functions <functions>
    Integral transforms <transforms>
    Bounded measures <measures>

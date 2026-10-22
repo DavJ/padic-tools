@@ -20,7 +20,7 @@ test = ["pytest>=8", "sympy>=1.12", "mpmath>=1.3"]
 dev = ["pytest>=8", "sympy>=1.12", "mpmath>=1.3", "sphinx>=7", "sphinxcontrib-katex>=0.9", "beautifulsoup4>=4.12", "build>=1"]
 
 [project.urls]
-Repository = "https://github.com/DavJ/padic-tools"
+Repository = "https://github.com/DavJ/padiclab"
 
 [tool.setuptools.packages.find]
 where = ["src"]
