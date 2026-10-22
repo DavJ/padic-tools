@@ -57,6 +57,41 @@ Vazbu tvoří faktor ``(1-p^(n-1))*zeta(1-n)``. Nuly komplexní zety z tohoto
 vztahu nelze automaticky ztotožnit s nulami p-adické větve. To zůstává
 samostatný matematický problém, nikoliv hotová vlastnost tohoto API.
 
+Transformace a Taylorův rozvoj
+------------------------------
+
+``AtomicMeasure`` je konečná vážená míra na Zp s přesnými racionálními
+body a vahami. Obsahuje přesné momenty, p-adickou Mellinovu transformaci
+na jednotkách a lokální Laplaceovu transformaci s jádrem ``exp(-t*x)``.
+Mellinova transformace má explicitní větev kořene jednotky; u p=2
+se zvlášť ošetřuje znaménko modulo 4. Omezení míry na jednotky se provádí
+výslovně pomocí ``restrict_units()``.
+
+Amiceova transformace používá jádro ``(1+T)^x``. Její binomické momenty
+jsou přesné; numerické vyčíslení přidává mez celého zbytku řady.
+Na společném oboru platí ``Laplace(t)=Amice(exp(-t)-1)``.
+Obecné nekonečné míry a inverzní transformace zatím implementovány nejsou.
+
+.. doctest::
+
+   >>> K = Qp(5, 18)
+   >>> mira = AtomicMeasure(K, [(1, 1), (2, 2)])
+   >>> mira.mellin(6, branch=2).is_congruent(mira.moment(6))
+   True
+   >>> mira.amice(exp(K(-5))-1).is_congruent(mira.laplace(K(5)))
+   True
+   >>> rozvoj = taylor(exp, K(5), order=24)
+   >>> rozvoj(K(10)).is_congruent(exp(K(10)), precision=18)
+   True
+
+``taylor`` počítá rozvoj ve zvoleném středu. Pro polynomy nad Q dává
+přesné racionální koeficienty. Pro p-adický střed podporuje polynomy,
+exp, log, log1p, sin a cos; vyčíslení vrací kouli obsahující chybu
+koeficientů, vstupu i celého vynechaného zbytku. Počet Taylorových členů
+se liší od počtu známých p-adických číslic. Podrobnosti najdeš v
+:doc:`kapitole o transformacích <transforms>` a
+:doc:`kapitole o Taylorových rozvojích <taylor>`.
+
 Jak funguje bridge
 ------------------
 

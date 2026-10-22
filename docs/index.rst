@@ -44,6 +44,8 @@ across packages: the prime, branch and Euler factor must match.
    Quick start <tutorial>
    Precision <precision>
    Special functions <functions>
+   Integral transforms <transforms>
+   Taylor expansions <taylor>
    Symbolic algebra <symbolic>
    Algebraic bridges <bridges>
    Architecture <architecture>

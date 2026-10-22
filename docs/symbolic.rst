@@ -10,6 +10,11 @@ integration and evaluation in a scalar algebra. ``PowerSeries`` represents
 Q[[x]] modulo x^N, with its own formal order separate from numerical p-adic
 precision.
 
+``Polynomial.shift(center)`` translates a polynomial exactly. ``taylor``
+adds rational-centered jets and certified local numerical expansions;
+see :doc:`taylor`. Exact moment series of measures are described in
+:doc:`transforms`.
+
 .. doctest::
 
    >>> x = Polynomial([0, 1])

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from fractions import Fraction
-from math import factorial, isqrt
+from math import comb, factorial, isqrt
 
 from .core import DomainError, Padic, PadicField, exact
 
@@ -89,6 +89,18 @@ class Polynomial:
     def derivative(self):
         """Formal derivative in Q[x]."""
         return Polynomial([i*c for i, c in enumerate(self.coefficients) if i])
+
+    def shift(self, center=0):
+        """Exact coefficients of f(center+h) as a polynomial in h over Q."""
+        a = exact(center)
+        return Polynomial([sum((self[j]*comb(j,n)*a**(j-n)
+                                for j in range(n, self.degree+1)), Fraction(0))
+                           for n in range(self.degree+1)])
+
+    def taylor(self, center=0, *, order=10):
+        """Taylor jet at a rational center, or a certified local p-adic expansion."""
+        from .taylor import taylor
+        return taylor(self, center, order=order)
 
     def integral(self, constant=0):
         """Formal antiderivative, with an exact integration constant."""

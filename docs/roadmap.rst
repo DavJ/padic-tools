@@ -18,6 +18,11 @@ Implemented
   on Zp away from the point s=1, with a documented branch convention.
 * Exact rational polynomials and formal power series; optional SymPy function
   nodes and numerical evaluation with domain checks.
+* Exact atomic measures on Zp, moments, branched Mellin transforms on units,
+  local Laplace transforms, and formal/numerical Amice transforms.
+* Rational-centered polynomial Taylor jets, exact polynomial translation,
+  and local p-adic Taylor expansions with certified tails for polynomials,
+  exp/log/log1p/sin/cos.
 * Rational/Gaussian diagonal bridges, selected split places, quaternion and
   biquaternion scalar base changes, and an explicit even-Clifford isomorphism.
 * A source-linked HTML guide and executable examples.
@@ -39,6 +44,29 @@ Next mathematical features
 6. General number-field places and invariants that have proved comparison
    theorems across completions. Any proposed complex-zero bridge needs a
    separate theorem and must not be inferred from agreement at special values.
+7. General bounded measures with explicit Mahler/Amice tail contracts,
+   rational non-atomic Amice measures and justified inverse transforms.
+8. Harmonic analysis of complex-valued functions on Qp: additive characters,
+   Haar integration, finite Fourier transforms, Kozyrev wavelets and
+   Vladimirov operators. Keep this integration setting explicit.
+
+Research applications
+----------------------
+
+The reusable mathematics belongs in the library; concrete models should
+come with reproducible examples and declared assumptions.
+
+* UBT/physics: biquaternion field operators, finite prime-sector spectra,
+  Gram matrices of theta modes, Hilbert symbols and local algebra invariants.
+  Test proposed dynamics and convergence from finite models explicitly.
+* Markets: ultrametric asset hierarchies, wavelet/theta features and regime
+  diagnostics, with chronological evaluation, costs and ordinary baselines.
+  A data encoding and an out-of-sample benefit must be demonstrated.
+* RH: adelic local zeta integrals, Mellin/Poisson identities, bounded-measure
+  moment comparisons, an optional rigorous complex Arb/FLINT backend,
+  certified zero counts and controlled finite-torus/prime-cutoff limits.
+  Finite numerical checks do not establish RH or identify complex and
+  p-adic zeros.
 
 PyPI release preparation
 ------------------------

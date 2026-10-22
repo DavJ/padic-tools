@@ -1,7 +1,7 @@
 :root{--ink:#19314c;--accent:#087e8b;--paper:#f6f8fa}
 body{color:var(--ink);background:var(--paper)}
 div.document{max-width:1180px;width:auto;margin:28px auto;background:white;padding:24px 28px;border-radius:12px;box-shadow:0 5px 24px #19314c0d}
-div.body{max-width:860px;font-family:system-ui,-apple-system,sans-serif;line-height:1.65;font-size:16px}
+div.body{max-width:860px;font-family:system-ui,-apple-system,sans-serif;line-height:1.65;font-size:16px;overflow-wrap:anywhere}
 div.body h1,div.body h2,div.body h3{font-family:system-ui,-apple-system,sans-serif;color:var(--ink)}
 a{color:var(--accent)}
 pre{padding:16px;border:1px solid #dce5ec;border-radius:8px;line-height:1.5}
@@ -17,5 +17,6 @@ div.admonition{border-radius:8px;border:1px solid #b8dce0;background:#f0f9fa}
 .language-switch a:hover{text-decoration:underline}
 section,[id]{scroll-margin-top:80px}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:8px 0}
+dl.py dt.sig{overflow-x:auto;overflow-y:hidden;max-width:100%}
 @media(max-width:875px){div.document{margin:0;padding:12px;border-radius:0}div.body{padding:12px}}
 @media(max-width:875px){body{padding:0}div.sphinxsidebar{background:#f0f5f8;color:var(--ink);padding:16px;margin:0}div.sphinxsidebar h1.logo{font-size:24px}div.sphinxsidebar p.blurb{color:var(--ink);font-size:13px;margin:8px 0}div.sphinxsidebar h3,div.sphinxsidebar .caption{display:none}div.sphinxsidebar ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;margin:12px 0 0;padding:0}div.sphinxsidebar ul ul{display:none}div.sphinxsidebar a{color:var(--accent)}.doc-toolbar{padding:8px 12px 0}}
