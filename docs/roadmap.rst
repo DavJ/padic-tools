@@ -11,6 +11,10 @@ Implemented
 
 * Exact rational conversion and finite precision Qp ball arithmetic, including
   nonintegral values, valuation and precision checks.
+* Certified unramified quadratic fields with an integral power basis,
+  common ideal-ball precision, uniformizer p, exact F_(p**2) residues,
+  inverses, algebraic norm/trace and lifted Frobenius, including Q3(i)
+  and the unramified quadratic extension of Q2.
 * Local exp/log/sin/cos, principal-unit powers, odd/dyadic square roots and
   simple-root Hensel lifting.
 * Multiplicative theta3 and theta4 constants with tail bounds.
@@ -44,9 +48,10 @@ Next mathematical features
 
 1. Broader independent Sage/PARI oracle coverage and performance baselines,
    particularly around KL branches and near poles.
-2. Ramified/unramified extension fields with uniformizers, residue fields and
-   extension-aware valuation/precision propagation. The current quadratic
-   coefficient algebra remains useful but is not that full engine.
+2. Ramified extensions beginning with Q2(i), dedicated Gaussian/quaternion
+   bridge adapters for local fields, and higher-degree unramified extensions.
+   Degree-two unramified fields already have their own valuation/precision
+   engine; formal quadratic coefficient algebras retain their wider scope.
 3. Singular Hensel lifting, general polynomial factorization, matrix solvers
    with condition-aware precision and optional accelerated arithmetic backends.
 4. General Dirichlet characters, the removable s=1 limits of nonprincipal

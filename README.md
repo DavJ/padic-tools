@@ -31,6 +31,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Layer | Implemented in 0.1 |
 |---|---|
 | Numerical | Qp balls, valuations, digits, inverses, precision propagation, simple-root Hensel lifting |
+| Local fields | Certified unramified quadratic extensions, uniformizer p, ideal-ball precision, exact quadratic residue fields, norm/trace and lifted Frobenius |
 | Analytic | exp, Iwasawa log with explicit log(p), log1p, sin, cos, principal-unit powers, square roots including p=2 |
 | Special functions | Multiplicative theta3, theta4 constants, exact Bernoulli/zeta values, numerical even KL zeta branches on Zp away from s=1 |
 | Symbolic | Rational polynomials, Euclidean division/gcd, formal series, composition/calculus, optional SymPy function nodes/evaluation |
@@ -40,6 +41,29 @@ assert z.is_congruent(Fraction(-31, 30))
 | Wavelets and operators | Exact finite Kozyrev bases and reconstruction, whole-Qp integer-order Vladimirov images with analytic tails, conservative ball generators and numerical diffusion |
 | Algebraic bridges | Q and Q[i] to independent completions, chosen split Gaussian places, rational/p-adic quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
+
+## Unramified quadratic fields
+
+```python
+from padic_tools import UnramifiedQuadraticField
+
+L = UnramifiedQuadraticField(Qp(3, 12), [1, 0, 1], name="i")
+x = L(1, 2)
+assert (L.generator**2).is_congruent(-1)
+assert (x*x.inverse()).is_congruent(1)
+assert x.norm().contains(5) and x.trace().contains(2)
+assert L.residue_field().order == 9
+assert x.frobenius().residue() == x.residue()**3
+```
+
+The constructor checks monicity, p-integral exact coefficients and
+irreducibility modulo p. `[1, 0, 1]` defines Q3(i); it is rejected over Q5
+(split) and Q2 (ramified). `[1, 1, 1]` instead defines the unramified
+quadratic extension of Q2. Each element is a whole ideal ball with common
+coordinate precision, including negative valuations. `norm()` is algebraic;
+`absolute_value()` is the p-adic magnitude. See [the extension chapter](docs/extensions.rst)
+for error bounds, exact residues and scope. Ramified fields, higher degrees,
+extension analytic functions and dedicated bridge adapters are subsequent steps.
 
 ## Transforms and Taylor expansions
 

@@ -43,6 +43,7 @@ across packages: the prime, branch and Euler factor must match.
 
    Quick start <tutorial>
    Precision <precision>
+   Unramified quadratic fields <extensions>
    Special functions <functions>
    Integral transforms <transforms>
    Bounded measures <measures>

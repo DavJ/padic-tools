@@ -8,7 +8,7 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, BallVladimirov, PadicTestFunction, Qp, RationalAmiceMeasure, exp, finite_fourier, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, BallVladimirov, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
@@ -132,3 +132,29 @@ def test_regional_vladimirov_against_independent_pari_kernel(p,a,b,order):
     op = BallVladimirov(p,order,support_exponent=a,constancy_exponent=b)
     f = PadicTestFunction(p,[j*j+1 for j in range(n)],support_exponent=a,constancy_exponent=b)
     assert tuple(value.as_fraction() for value in op.apply(f).values) == oracle
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,c,b", [(2,1,1),(3,1,0),(5,2,0),(7,1,0)])
+def test_unramified_quadratic_against_pari_polymod(p,c,b):
+    # PARI inverts a polynomial modulo f over its own Qp coefficient field;
+    # it independently computes the norm and trace of that polymod.
+    script = (
+        f"f=t^2+{b}*t+{c};z=Mod((1/{p}+O({p}^32))+(3+O({p}^32))*t,f);\n"
+        "w=lift(z^-1);print(lift(polcoef(w,0)));print(lift(polcoef(w,1)));\n"
+        "print(lift(norm(z)));print(lift(trace(z)));\n"
+        f"w=lift(z*Mod(1+{p}*t,f));print(lift(polcoef(w,0)));print(lift(polcoef(w,1)));\n"
+        f"print(valuation(lift(z),{p}));quit\n"
+    )
+    result = subprocess.run(["gp","-q","-f"],input=script,text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 7
+    L = UnramifiedQuadraticField(Qp(p,12),[c,b,1])
+    x = L(Fraction(1,p),3)
+    assert x.inverse().contains(oracle[:2])
+    assert x.norm().contains(oracle[2])
+    assert x.trace().contains(oracle[3])
+    assert (x*L(1,p)).contains(oracle[4:6])
+    assert x.valuation() == oracle[6]

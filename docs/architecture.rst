@@ -11,6 +11,8 @@ Architecture and contribution guide
      - Exact rational conversion, prime validation and immutable Qp balls
    * - ``analytic``
      - Local series, log branches, square roots and principal-unit powers
+   * - ``extensions``
+     - Certified unramified quadratic fields, common ideal-ball precision, exact quadratic residues and Frobenius
    * - ``special``
      - Bernoulli values, theta series and explicit numerical KL branches
    * - ``symbolic``
@@ -33,6 +35,11 @@ The first four modules depend only on Python's standard library. Importing
 constants are handled before finite precision conversion wherever possible.
 All extension points preserve the distinction between exact coefficients and
 approximate p-adic balls.
+
+The extension engine validates an integral power basis by irreducibility
+modulo p. Its valuation and norm bounds apply to unramified degree two;
+ramified bases need their own engine. Read :doc:`extensions` before adapting
+the scalar-generic algebras or analytic functions to a larger field.
 
 The harmonic layer also uses only the standard library for its exact
 cyclotomic arithmetic. Its functions have rational/cyclotomic values in a

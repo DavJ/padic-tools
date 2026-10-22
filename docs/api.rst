@@ -8,6 +8,12 @@ Core numbers
    :members:
    :undoc-members:
 
+Unramified quadratic extensions
+--------------------------------
+
+.. automodule:: padic_tools.extensions
+   :members:
+
 Analytic functions
 ------------------
 

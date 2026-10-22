@@ -62,7 +62,11 @@ For p congruent to 1 modulo 4, -1 is a square in Qp. The two split place
 choices are explicit, and the quadratic quotient is Qp x Qp, not a field.
 For p congruent to 3 modulo 4 it is an unramified quadratic field. At p=2
 it is a ramified quadratic field. In every case the coefficient algebra is
-implemented; a full extension-field valuation/precision engine is not.
+implemented. A separate :doc:`unramified quadratic field engine <extensions>`
+now supplies valuation, uniformizer, residues and ideal-ball precision for
+the unramified case. The existing bridge methods retain their coefficient
+algebra return types; dedicated field adapters and the ramified engine are
+subsequent steps.
 
 .. doctest::
 

@@ -178,6 +178,34 @@ hmotnosti, minima hustoty a pokles L2 normy. Vyčíslení difuze používá
 komplexní numeriku s nastavenou pracovní přesností, zatímco báze a matice
 operátoru zůstávají přesné.
 
+Nerozvětvená kvadratická rozšíření
+--------------------------------------------
+
+``UnramifiedQuadraticField`` ověří monický kvadratický polynom s p-adicky
+celými přesnými koeficienty a nerozložitelnou redukcí modulo p. Každý prvek
+pak nese přesnost celé ideálové koule; valuace je minimum valuací jeho dvou
+souřadnic. Uniformizátorem je p a reziduální pole má p na druhou prvků.
+K dispozici jsou inverze, algebraická norma, stopa, konjugace a Frobenius.
+
+.. doctest::
+
+   >>> L = UnramifiedQuadraticField(Qp(3, 12), [1, 0, 1], name="i")
+   >>> x = L(1, 2)
+   >>> (x*x.inverse()).is_congruent(1)
+   True
+   >>> x.norm().contains(5), x.trace().contains(2)
+   (True, True)
+   >>> L.residue_field().order
+   9
+
+Polynom x^2+1 je vhodný pro Q3(i), ale konstruktor jej odmítne nad Q5,
+kde se rozštěpí, i nad Q2, kde definuje rozvětvené rozšíření. Nerozvětvené
+kvadratické rozšíření Q2 lze místo toho zadat polynomem x^2+x+1.
+``norm()`` vrací algebraickou normu do Qp; p-adickou absolutní hodnotu
+vrací ``absolute_value()``. Definice, odvození přesnosti a další příklady
+jsou v :doc:`kapitole o rozšířeních <extensions>`. Rozvětvený případ a nové
+adaptéry bridge jsou další samostatné kroky.
+
 Jak funguje bridge
 ------------------
 
@@ -196,7 +224,8 @@ Nesnažíme se převádět konečný p-adický zbytek na údajnou komplexní apr
    True
 
 Pro ``p=1 mod 4`` existují dvě volby obrazu i přímo v Qp. Pro ``p=3 mod 4``
-potřebujeme kvadratické rozšíření; API pak pracuje s dvojicí koeficientů.
+potřebujeme kvadratické rozšíření. Nový ověřený engine je popsaný výše;
+stávající metoda ``padic_algebra`` nadále vrací koeficientovou algebru.
 U p=2 je rozšíření rozvětvené a současná reprezentace neslibuje plnou
 aritmetiku s uniformizátorem. Kvadratická algebra je implementována ve všech
 těchto případech; rozlišení pole a rozštěpené algebry je podstatné.
