@@ -50,6 +50,15 @@ Harmonic analysis
 .. automodule:: padic_tools.harmonic
    :members:
 
+Wavelets and diffusion
+-----------------------
+
+.. automodule:: padic_tools.wavelets
+   :members:
+
+.. automodule:: padic_tools.operators
+   :members:
+
 Optional SymPy adapter
 ----------------------
 

@@ -48,6 +48,7 @@ across packages: the prime, branch and Euler factor must match.
    Bounded measures <measures>
    Mellin of rational measures <mellin>
    Harmonic analysis <harmonic>
+   Wavelets and diffusion <wavelets>
    Taylor expansions <taylor>
    Symbolic algebra <symbolic>
    Algebraic bridges <bridges>

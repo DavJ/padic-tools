@@ -33,6 +33,10 @@ Implemented
 * Exact additive characters, real Haar volumes/integration, finite Fourier
   transforms and compactly supported locally constant functions on Qp with
   rational/cyclotomic source values; exact inversion, Parseval and convolution.
+* Amplitude-one Kozyrev wavelets with exact norms, finite orthogonal
+  decomposition/reconstruction, positive integer-order whole-Qp Vladimirov
+  derivatives with full exterior tails, conservative regional ball generators
+  and numerical heat evolution with a reproducible boundary/refinement example.
 * A source-linked HTML guide and executable examples.
 
 Next mathematical features
@@ -55,8 +59,9 @@ Next mathematical features
 7. Arbitrary bounded-measure coefficient oracles and justified inverse
    transforms. For a user-supplied general Mahler prefix, integration still
    requires a caller-supplied uniform bound for omitted coefficients.
-8. Kozyrev wavelets, Vladimirov operators, multidimensional harmonic grids,
-   accelerated Fourier backends and more general complex source coefficients.
+8. General real-order operators, whole-space numerical heat evolution,
+   multidimensional harmonic grids, accelerated Fourier backends and more
+   general complex source coefficients.
    Preserve the distinction between exact finite test functions and a
    controlled approximation to an arbitrary function on Qp.
 

@@ -8,7 +8,7 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, Qp, RationalAmiceMeasure, exp, finite_fourier, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, BallVladimirov, PadicTestFunction, Qp, RationalAmiceMeasure, exp, finite_fourier, log, taylor, zeta_p
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
@@ -112,3 +112,23 @@ def test_exact_fourier_complex_place_against_pari(p,n):
         reference = ctx.mpc(ctx.mpf(oracle[2*k].replace(" ","")),
                             ctx.mpf(oracle[2*k+1].replace(" ","")))
         assert abs(value.complex(80)-reference) < ctx.mpf("1e-74")
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,a,b,order", [(2,0,2,1),(3,-1,1,2),(5,0,1,1)])
+def test_regional_vladimirov_against_independent_pari_kernel(p,a,b,order):
+    n = p**(b-a)
+    script = (
+        f"p={p};a={a};b={b};s={order};N={n};C=(p^s-1)/(1-p^(-1-s));\n"
+        "M=matrix(N,N,j,k,if(j==k,0,-C*p^(-b)*p^((1+s)*(a+valuation(j-k,p)))));\n"
+        "for(j=1,N,M[j,j]=-sum(k=1,N,M[j,k]));\n"
+        "v=vector(N,j,(j-1)^2+1)~;w=M*v;for(j=1,N,print(w[j]));\nquit\n"
+    )
+    result = subprocess.run(["gp","-q","-f"],input=script,text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = tuple(Fraction(line) for line in result.stdout.splitlines())
+    assert len(oracle) == n
+    op = BallVladimirov(p,order,support_exponent=a,constancy_exponent=b)
+    f = PadicTestFunction(p,[j*j+1 for j in range(n)],support_exponent=a,constancy_exponent=b)
+    assert tuple(value.as_fraction() for value in op.apply(f).values) == oracle

@@ -37,6 +37,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Transforms | Exact atomic and bounded rational Amice measures, moments/polynomial integration, unit restriction, certified branched Mellin, local Laplace, Amice evaluation and additive convolution |
 | Taylor | Exact polynomial shifts and rational jets; local p-adic exp/log/log1p/sin/cos and polynomial expansions with whole-tail enclosures |
 | Harmonic analysis | Exact additive characters, real Haar integration, finite Fourier transforms, compactly supported test functions, inversion, Parseval and convolution |
+| Wavelets and operators | Exact finite Kozyrev bases and reconstruction, whole-Qp integer-order Vladimirov images with analytic tails, conservative ball generators and numerical diffusion |
 | Algebraic bridges | Q and Q[i] to independent completions, chosen split Gaussian places, rational/p-adic quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
 
@@ -93,6 +94,31 @@ are real, with volume(Zp)=1. The transform retains support/constancy metadata
 for the dual Qp lattice. Raw `finite_fourier` arrays have an explicit 1/N
 forward normalization. Native work limits are documented in the harmonic
 chapter; accelerated backends and general complex samples remain future work.
+
+## Wavelets and conservative diffusion
+
+```python
+from padic_tools import KozyrevBasis, kozyrev_wavelet, vladimirov, BallVladimirov
+
+basis = KozyrevBasis(K3, constancy_exponent=2)
+signal = PadicTestFunction(K3, range(9), constancy_exponent=2)
+assert basis.reconstruct(basis.decompose(signal)) == signal
+wave = kozyrev_wavelet(K3, scale=1)
+assert vladimirov(wave, order=2).as_test_function() == wave * 81
+
+operator = BallVladimirov(K3, constancy_exponent=2)
+initial = (PadicTestFunction.ball(K3, exponent=2)*9).on_lattice(
+    support_exponent=0, constancy_exponent=2)
+state = operator.evolve(initial, Fraction(1, 10), dps=60)  # complex extra
+assert abs(state.integral()-1) < 10**-50
+```
+
+Wavelets retain their exact squared norms. `vladimirov` includes the entire
+exterior tail for nonzero-mass input on Qp. `BallVladimirov` instead uses the
+regional conservative boundary on its declared ball. Its exact spectrum and
+kernel matrix determine mass-preserving heat evolution. Numerical outputs
+use isolated mpmath working precision. Run `python examples/padic_diffusion.py`
+for a reproducible positivity, mass, energy and grid/boundary comparison.
 
 ## The bridge is included
 
