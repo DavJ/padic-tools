@@ -70,7 +70,13 @@ výslovně pomocí ``restrict_units()``.
 Amiceova transformace používá jádro ``(1+T)^x``. Její binomické momenty
 jsou přesné; numerické vyčíslení přidává mez celého zbytku řady.
 Na společném oboru platí ``Laplace(t)=Amice(exp(-t)-1)``.
-Obecné nekonečné míry a inverzní transformace zatím implementovány nejsou.
+``RationalAmiceMeasure`` navíc zadává míru úplnou racionální Amiceovou
+transformací ``P(T)/Q(T)``. Konstruktor ověřuje podmínku omezenosti
+koeficientů. Tato vrstva počítá přesné momenty, integrály polynomů,
+Laplaceovu transformaci a konvoluci bez konečného seznamu bodů.
+Při integraci prefixu Mahlerova rozvoje musí volající doložit mez všech
+vynechaných koeficientů. Obecná Mellinova transformace této nové třídy
+a inverzní transformace zatím nejsou implementovány.
 
 .. doctest::
 
@@ -83,6 +89,11 @@ Obecné nekonečné míry a inverzní transformace zatím implementovány nejsou
    >>> rozvoj = taylor(exp, K(5), order=24)
    >>> rozvoj(K(10)).is_congruent(exp(K(10)), precision=18)
    True
+   >>> racionalni = RationalAmiceMeasure(K, [1], [2, 1])
+   >>> racionalni.moment(3)
+   Fraction(1, 8)
+   >>> all(racionalni.moment(k) == (-1)**k*(1-2**(k+1))*zeta_special(-k) for k in range(10))
+   True
 
 ``taylor`` počítá rozvoj ve zvoleném středu. Pro polynomy nad Q dává
 přesné racionální koeficienty. Pro p-adický střed podporuje polynomy,
@@ -90,7 +101,8 @@ exp, log, log1p, sin a cos; vyčíslení vrací kouli obsahující chybu
 koeficientů, vstupu i celého vynechaného zbytku. Počet Taylorových členů
 se liší od počtu známých p-adických číslic. Podrobnosti najdeš v
 :doc:`kapitole o transformacích <transforms>` a
-:doc:`kapitole o Taylorových rozvojích <taylor>`.
+:doc:`kapitole o Taylorových rozvojích <taylor>`, další příklady pak v
+:doc:`kapitole o omezených mírách <measures>`.
 
 Jak funguje bridge
 ------------------

@@ -32,6 +32,9 @@ Measures and transforms
 .. automodule:: padic_tools.transforms
    :members:
 
+.. automodule:: padic_tools.measures
+   :members:
+
 Taylor expansions
 ------------------
 
