@@ -10,6 +10,10 @@ from .symbolic import Polynomial, PowerSeries, exp_series, hensel_lift, log1p_se
 from .transforms import AtomicMeasure
 from .measures import RationalAmiceMeasure
 from .taylor import TaylorExpansion, taylor
+from .harmonic import (
+    CyclotomicValue, PadicTestFunction, additive_character, additive_phase,
+    finite_fourier, haar_volume,
+)
 from .algebra import (
     Biquaternions, CliffordAlgebra, Gaussian, Hamilton, Multivector,
     QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra,
@@ -23,6 +27,8 @@ __all__ = [
     "bernoulli", "theta3", "theta4", "zeta_special", "zeta_euler_value", "zeta_p",
     "Polynomial", "PowerSeries", "hensel_lift", "exp_series", "log1p_series", "theta3_series",
     "AtomicMeasure", "RationalAmiceMeasure", "TaylorExpansion", "taylor",
+    "CyclotomicValue", "PadicTestFunction", "additive_character", "additive_phase",
+    "finite_fourier", "haar_volume",
     "QuadraticAlgebra", "QuadraticElement", "Gaussian", "QuaternionAlgebra", "Quaternion",
     "Hamilton", "Biquaternions", "CliffordAlgebra", "Multivector",
     "RationalBridge", "GaussianBridge", "QuaternionBridge", "riemann_zeta",

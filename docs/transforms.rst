@@ -133,7 +133,8 @@ complete rational Amice transform, exact moments, local Laplace evaluation,
 exact unit restriction and Mellin evaluation with proved Mahler tails; see
 :doc:`measures` and :doc:`mellin`. General bounded measures and transform inverses remain
 future extensions. Qp-valued bounded measures and the real Haar measure
-used for complex-valued harmonic analysis are separate integration settings.
+used for complex-valued harmonic analysis are separate integration settings;
+the latter is implemented for exact finite test functions in :doc:`harmonic`.
 
 For the measure/series correspondence, Dirac measures and Mellin characters,
 see Rodrigues Jacinto and Williams, sections 2.2--2.4 and 4.3, linked in

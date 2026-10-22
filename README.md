@@ -36,6 +36,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Symbolic | Rational polynomials, Euclidean division/gcd, formal series, composition/calculus, optional SymPy function nodes/evaluation |
 | Transforms | Exact atomic and bounded rational Amice measures, moments/polynomial integration, unit restriction, certified branched Mellin, local Laplace, Amice evaluation and additive convolution |
 | Taylor | Exact polynomial shifts and rational jets; local p-adic exp/log/log1p/sin/cos and polynomial expansions with whole-tail enclosures |
+| Harmonic analysis | Exact additive characters, real Haar integration, finite Fourier transforms, compactly supported test functions, inversion, Parseval and convolution |
 | Algebraic bridges | Q and Q[i] to independent completions, chosen split Gaussian places, rational/p-adic quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
 
@@ -70,6 +71,28 @@ evaluator proves an infinite Mahler-tail bound, including the dyadic case;
 General bounded-measure oracles and transform inverses are future extensions.
 Formal series order and p-adic numerical precision are
 tracked separately; a numerical Taylor expansion includes its omitted tail.
+
+## Exact harmonic analysis
+
+```python
+from padic_tools import PadicTestFunction, additive_phase
+
+K3 = Qp(3)
+assert additive_phase(Fraction(1, 6), K3) == Fraction(2, 3)
+f = PadicTestFunction(K3, [1, 2, 4])  # Supported on Z3, constant modulo 3
+assert f.integral().as_fraction() == Fraction(7, 3)
+spectrum = f.fourier()
+assert spectrum.fourier(inverse=True) == f
+assert spectrum.norm_squared() == f.norm_squared()
+assert PadicTestFunction.ball(K3).fourier() == PadicTestFunction.ball(K3)
+```
+
+The coefficients are exact rational combinations of complex p-power roots of
+unity; `.complex(dps=...)` provides an optional numerical view. Haar weights
+are real, with volume(Zp)=1. The transform retains support/constancy metadata
+for the dual Qp lattice. Raw `finite_fourier` arrays have an explicit 1/N
+forward normalization. Native work limits are documented in the harmonic
+chapter; accelerated backends and general complex samples remain future work.
 
 ## The bridge is included
 

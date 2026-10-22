@@ -27,6 +27,21 @@ presented as establishing a new complex/p-adic zero correspondence.
   — Lemma 5.8, Proposition 5.10 and Corollary 5.13 give Mahler integration
   and kernel tail bounds. The adaptation to every torsion branch, and the
   implementation's precision contract, are explained in :doc:`mellin`.
+* `Tao: Tate's proof of the functional equation
+  <https://terrytao.wordpress.com/2008/07/27/tates-proof-of-the-functional-equation/>`_
+  — the p-adic section defines normalized real Haar measure, the positive
+  additive character, the negative Fourier kernel and the self-dual unit-ball
+  indicator. These conventions agree with :doc:`harmonic`.
+* `Kedlaya: Adelic Fourier analysis after Tate
+  <https://kskedlaya.org/cft/sec_adelic-fourier.html>`_
+  — section 6.6 describes additive duality and local Fourier inversion,
+  including the dependence on character and Haar normalization. Our finite
+  lattice derivation is given in :doc:`harmonic`.
+* `Sage: Algebraic numbers and number fields
+  <https://doc.sagemath.org/html/en/reference/number_fields/sage/rings/number_field/number_field.html>`_
+  — cyclotomic fields and their chosen complex embeddings. The native
+  harmonic coefficient ring implements rational combinations of p-power
+  roots; it does not provide general number-field arithmetic.
 * `Mathlib: The Amice transform
   <https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Measure/AmiceTransform.html>`_
   — the formal definition and coefficient identity for the Amice transform;

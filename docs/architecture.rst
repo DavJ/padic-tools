@@ -17,6 +17,10 @@ Architecture and contribution guide
      - Exact Q[x] and truncated Q[[x]], independent of optional CAS packages
    * - ``sympy_bridge``
      - Optional typed symbolic function expressions and safe numeric evaluation
+   * - ``transforms``, ``measures``, ``taylor``
+     - Exact measure data, bounded Amice transforms and certified local expansions
+   * - ``harmonic``
+     - Complex-place additive characters, real Haar integration and exact finite Fourier transforms
    * - ``algebra``
      - Scalar-generic quadratic, quaternion and diagonal Clifford algebras
    * - ``bridges``
@@ -27,6 +31,12 @@ The first four modules depend only on Python's standard library. Importing
 constants are handled before finite precision conversion wherever possible.
 All extension points preserve the distinction between exact coefficients and
 approximate p-adic balls.
+
+The harmonic layer also uses only the standard library for its exact
+cyclotomic arithmetic. Its functions have rational/cyclotomic values in a
+chosen complex place; Haar weights are real. Optional ``.complex(dps)``
+evaluation uses an isolated mpmath context. Keep these integrals separate
+from Qp-valued bounded measures and their Mellin/Amice transforms.
 
 Adding an analytic function
 ---------------------------
