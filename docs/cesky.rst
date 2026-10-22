@@ -1,10 +1,10 @@
-Česky: použití a matematické propojení
-======================================
+Český průvodce
+==============
 
 Knihovna už obsahuje numerickou i symbolickou vrstvu a skutečně implementované
 propojení s komplexními čísly, kvaterniony, bikvaterniony a geometrickou
-algebrou. Je to první použitelná výzkumná verze 0.1; rozsah a plán rozšíření
-jsou v :doc:`roadmap`.
+algebrou. Je to první použitelná výzkumná verze 0.1; rozsah a další plán
+najdeš v :doc:`přehledu vývoje <roadmap>`.
 
 Numerické počítání
 ------------------
@@ -99,4 +99,5 @@ projekce podle stupně, geometrický a vnější součin.
 
 Geometrická algebra tedy sjednocuje algebraické operace. Rozdíl mezi
 komplexní a p-adickou konvergencí tím nezaniká. Podrobné definice, odvození
-a odkazy jsou v :doc:`bridges`, :doc:`functions` a :doc:`references`.
+a odkazy jsou v :doc:`kapitole o propojení <bridges>`,
+:doc:`kapitole o funkcích <functions>` a :doc:`seznamu zdrojů <references>`.

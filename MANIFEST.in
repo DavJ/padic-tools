@@ -1,7 +1,7 @@
 include README.md
 include RELEASING.md
 include main.py
-recursive-include docs *.rst *.py *.css
+recursive-include docs *.rst *.py *.css *.html
 recursive-include tests *.py
 recursive-include examples *.py
 recursive-include scripts *.py

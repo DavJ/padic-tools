@@ -6,21 +6,6 @@ bridges to complex numbers, quaternions, biquaternions and geometric algebra.
 Version 0.1 keeps the coefficient data, analytic domain and approximation
 precision visible in the API.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Guide
-
-   cesky
-   tutorial
-   precision
-   functions
-   symbolic
-   bridges
-   architecture
-   roadmap
-   references
-   api
-
 Install
 -------
 
@@ -51,3 +36,22 @@ First calculation
 Read :doc:`bridges` for the included complex/p-adic construction and its
 Clifford interpretation. Read :doc:`functions` before comparing zeta values
 across packages: the prime, branch and Euler factor must match.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Guide
+
+   Quick start <tutorial>
+   Precision <precision>
+   Special functions <functions>
+   Symbolic algebra <symbolic>
+   Algebraic bridges <bridges>
+   Architecture <architecture>
+   Roadmap <roadmap>
+   References <references>
+   API reference <api>
+
+.. toctree::
+   :hidden:
+
+   cesky
