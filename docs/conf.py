@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"src"))
-project = "padic-tools"
+project = "padiclab"
 author = "David Jaroš"
 copyright = "2026, David Jaroš"
 release = "0.1.0"

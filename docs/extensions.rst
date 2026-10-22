@@ -239,8 +239,9 @@ theta=i:
    True
 
 The existing ``GaussianBridge.padic_algebra`` and quaternion bridge still
-return their documented coefficient algebras. Dedicated bridge adapters,
-ramified Q2(i), other extension degrees, general isomorphisms and extension
+return their documented coefficient algebras. The separate :doc:`ramified`
+engine now includes Q2(i) in a certified uniformizer basis. Dedicated bridge
+adapters, other extension degrees, general isomorphisms and extension
 analytic functions are subsequent steps. Existing Qp analytic functions do
 not acquire a larger domain merely by introducing this field class.
 ``Polynomial`` evaluation already works by arithmetic in the chosen field.

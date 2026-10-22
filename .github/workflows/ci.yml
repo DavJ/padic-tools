@@ -62,7 +62,21 @@ jobs:
       - run: python -m twine check dist/*
       - run: python -m venv /tmp/padic-wheel-check
       - run: /tmp/padic-wheel-check/bin/python -m pip install --no-deps dist/*.whl
-      - run: /tmp/padic-wheel-check/bin/python -c 'from padic_tools import Qp, UnramifiedQuadraticField, zeta_p; assert zeta_p(-3,Qp(5)).is_congruent("-31/30"); L=UnramifiedQuadraticField(Qp(3),[1,0,1]); x=L(1,2); assert x.norm().contains(5); assert (x*x.inverse()).is_congruent(1); assert x.residue().frobenius()==x.residue()**3'
+      - run: |
+          /tmp/padic-wheel-check/bin/python - <<'PY'
+          from padic_tools import Qp, Q2i, UnramifiedQuadraticField, zeta_p
+          assert zeta_p(-3,Qp(5)).is_congruent("-31/30")
+          L = UnramifiedQuadraticField(Qp(3),[1,0,1])
+          x = L(1,2)
+          assert x.norm().contains(5) and (x*x.inverse()).is_congruent(1)
+          assert x.residue().frobenius() == x.residue()**3
+          R = Q2i(12)
+          pi = R.uniformizer()
+          assert ((pi-1)**2).is_congruent(-1)
+          assert pi.valuation() == 1 and R(2).valuation() == 2
+          assert pi.norm().contains(2) and (pi*pi.inverse()).is_congruent(1)
+          assert tuple(c.precision for c in R(1,1,absprec=5).coefficients) == (3,2)
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: distribution-packages

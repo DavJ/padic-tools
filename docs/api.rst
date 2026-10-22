@@ -13,6 +13,14 @@ Unramified quadratic extensions
 
 .. automodule:: padic_tools.extensions
    :members:
+   :inherited-members:
+
+Ramified quadratic extensions
+-------------------------------
+
+.. automodule:: padic_tools.ramified
+   :members:
+   :inherited-members:
 
 Analytic functions
 ------------------

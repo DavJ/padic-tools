@@ -20,7 +20,7 @@ Configure a pending Trusted Publisher on TestPyPI with:
 |---|---|
 | Project | The final `project.name` in `pyproject.toml` |
 | Owner | `DavJ` |
-| Repository | `padic-tools` (update if the repository is renamed) |
+| Repository | `padiclab` |
 | Workflow | `publish.yml` |
 | Environment | `testpypi` |
 

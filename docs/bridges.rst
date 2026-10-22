@@ -65,8 +65,9 @@ it is a ramified quadratic field. In every case the coefficient algebra is
 implemented. A separate :doc:`unramified quadratic field engine <extensions>`
 now supplies valuation, uniformizer, residues and ideal-ball precision for
 the unramified case. The existing bridge methods retain their coefficient
-algebra return types; dedicated field adapters and the ramified engine are
-subsequent steps.
+algebra return types. The separate :doc:`ramified` engine also supplies
+Q2(i) using pi=1+i, with Gaussian coordinate conversion (a,b) -> (a-b,b).
+Dedicated bridge adapters are subsequent steps.
 
 .. doctest::
 

@@ -8,7 +8,7 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, BallVladimirov, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, BallVladimirov, EisensteinQuadraticField, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
@@ -158,3 +158,31 @@ def test_unramified_quadratic_against_pari_polymod(p,c,b):
     assert x.trace().contains(oracle[3])
     assert (x*L(1,p)).contains(oracle[4:6])
     assert x.valuation() == oracle[6]
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,c,b", [(2,2,-2),(2,-2,0),(3,-3,0),(5,5,5)])
+def test_eisenstein_quadratic_against_pari_polymod_and_norm_valuation(p,c,b):
+    points = [(0,1),(Fraction(1,p),3),(0,Fraction(1,p)),(p,p)]
+    script = f"f=t^2+({b})*t+({c});\n"
+    for a,d in points:
+        script += (
+            f"z=Mod(({a}+O({p}^40))+({d}+O({p}^40))*t,f);\n"
+            "w=lift(z^-1);print(lift(polcoef(w,0)));print(lift(polcoef(w,1)));\n"
+            "print(lift(norm(z)));print(lift(trace(z)));\n"
+            f"w=lift(z*Mod(1+{p}*t,f));print(lift(polcoef(w,0)));print(lift(polcoef(w,1)));\n"
+            f"print(valuation(norm(z),{p}));\n"
+        )
+    result = subprocess.run(["gp","-q","-f"],input=script+"quit\n",text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 7*len(points)
+    L = EisensteinQuadraticField(Qp(p,12),[c,b,1])
+    for j,(a,d) in enumerate(points):
+        x, reference = L(a,d), oracle[7*j:7*j+7]
+        assert x.inverse().contains(reference[:2])
+        assert x.norm().contains(reference[2])
+        assert x.trace().contains(reference[3])
+        assert (x*L(1,p)).contains(reference[4:6])
+        assert x.valuation() == reference[6]
