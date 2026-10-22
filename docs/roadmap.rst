@@ -22,7 +22,9 @@ Implemented
   local Laplace transforms, and formal/numerical Amice transforms.
 * Bounded rational Amice measures with a checked coefficient bound, exact
   moments/polynomial integration, local Laplace evaluation, convolution and
-  conditional Mahler-prefix integration with an explicit caller tail bound.
+  conditional Mahler-prefix integration with an explicit caller tail bound;
+  exact restriction to units and branched Mellin evaluation with certified
+  tails for odd primes and p=2.
 * Rational-centered polynomial Taylor jets, exact polynomial translation,
   and local p-adic Taylor expansions with certified tails for polynomials,
   exp/log/log1p/sin/cos.
@@ -47,10 +49,9 @@ Next mathematical features
 6. General number-field places and invariants that have proved comparison
    theorems across completions. Any proposed complex-zero bridge needs a
    separate theorem and must not be inferred from agreement at special values.
-7. Arbitrary bounded-measure coefficient oracles, unit restriction and general
-   Mellin evaluation for rational Amice measures, and justified inverse
-   transforms. Mahler-prefix integration currently requires a caller-supplied
-   uniform bound for the omitted coefficients.
+7. Arbitrary bounded-measure coefficient oracles and justified inverse
+   transforms. For a user-supplied general Mahler prefix, integration still
+   requires a caller-supplied uniform bound for omitted coefficients.
 8. Harmonic analysis of complex-valued functions on Qp: additive characters,
    Haar integration, finite Fourier transforms, Kozyrev wavelets and
    Vladimirov operators. Keep this integration setting explicit.

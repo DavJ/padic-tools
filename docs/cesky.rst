@@ -74,9 +74,11 @@ Na společném oboru platí ``Laplace(t)=Amice(exp(-t)-1)``.
 transformací ``P(T)/Q(T)``. Konstruktor ověřuje podmínku omezenosti
 koeficientů. Tato vrstva počítá přesné momenty, integrály polynomů,
 Laplaceovu transformaci a konvoluci bez konečného seznamu bodů.
-Při integraci prefixu Mahlerova rozvoje musí volající doložit mez všech
-vynechaných koeficientů. Obecná Mellinova transformace této nové třídy
-a inverzní transformace zatím nejsou implementovány.
+Obsahuje také přesné omezení na jednotky a Mellinovu transformaci pro necelé
+p-adické exponenty. Ta používá doložený odhad celého Mahlerova zbytku,
+zvlášť pro lichá prvočísla a p=2. Při integraci jiného, uživatelského prefixu
+Mahlerova rozvoje musí volající doložit mez vynechaných koeficientů.
+Inverzní transformace zatím nejsou implementovány.
 
 .. doctest::
 
@@ -94,6 +96,13 @@ a inverzní transformace zatím nejsou implementovány.
    Fraction(1, 8)
    >>> all(racionalni.moment(k) == (-1)**k*(1-2**(k+1))*zeta_special(-k) for k in range(10))
    True
+   >>> jednotky = racionalni.restrict_units()
+   >>> jednotky.moment(3)
+   Fraction(-31, 2)
+   >>> jednotky.mellin(3, branch=3).contains(jednotky.moment(3))
+   True
+   >>> jednotky.mellin(Fraction(1, 2), branch=3).precision
+   18
 
 ``taylor`` počítá rozvoj ve zvoleném středu. Pro polynomy nad Q dává
 přesné racionální koeficienty. Pro p-adický střed podporuje polynomy,
@@ -102,7 +111,8 @@ koeficientů, vstupu i celého vynechaného zbytku. Počet Taylorových členů
 se liší od počtu známých p-adických číslic. Podrobnosti najdeš v
 :doc:`kapitole o transformacích <transforms>` a
 :doc:`kapitole o Taylorových rozvojích <taylor>`, další příklady pak v
-:doc:`kapitole o omezených mírách <measures>`.
+:doc:`kapitole o omezených mírách <measures>` a
+:doc:`kapitole o jejich Mellinově transformaci <mellin>`.
 
 Jak funguje bridge
 ------------------

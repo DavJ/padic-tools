@@ -20,7 +20,13 @@ presented as establishing a new complex/p-adic zero correspondence.
   — the KL construction, special-value interpolation and character variables;
   see Theorem 3.12 and section 4.3.
   Sections 2.2--2.4 also describe the measure/series correspondence,
-  binomial moments and Dirac measures used in :doc:`transforms`.
+  binomial moments, Dirac measures and the root-of-unity restriction formula
+  used in :doc:`transforms` and :doc:`mellin`.
+* `Roblot: Computing p-adic L-functions of totally real number fields
+  <https://arxiv.org/html/1110.0246v1>`_
+  — Lemma 5.8, Proposition 5.10 and Corollary 5.13 give Mahler integration
+  and kernel tail bounds. The adaptation to every torsion branch, and the
+  implementation's precision contract, are explained in :doc:`mellin`.
 * `Mathlib: The Amice transform
   <https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/Padics/Measure/AmiceTransform.html>`_
   — the formal definition and coefficient identity for the Amice transform;

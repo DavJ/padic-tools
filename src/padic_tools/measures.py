@@ -5,13 +5,13 @@ binomial moments. No finite atom list or sampling cutoff is needed.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field as data_field
 from fractions import Fraction
 from functools import lru_cache
 from math import factorial
 
 from .analytic import exp
-from .core import DomainError, Padic, PadicField, exact, valuation
+from .core import DomainError, Padic, PadicField, PrecisionError, exact, valuation
 from .symbolic import Polynomial, PowerSeries
 from .transforms import AtomicMeasure, _order
 
@@ -50,13 +50,14 @@ class RationalAmiceMeasure:
     that every Amice coefficient has valuation at least ``valuation_bound``.
 
     This represents an infinite sequence of binomial moments, rather than
-    assuming that a finite prefix has zero tail. General Mellin evaluation
-    on units and inverse transforms are not part of this class yet.
+    assuming that a finite prefix has zero tail. Unit restriction is exact;
+    Mellin evaluation on unit-supported measures uses certified Mahler tails.
     """
     field: PadicField
     numerator: Polynomial
     denominator: Polynomial
     valuation_bound: int
+    _unit_support: bool = data_field(default=False,repr=False,compare=False)
 
     def __init__(self, field, numerator, denominator=1):
         if not isinstance(field, PadicField):
@@ -73,7 +74,7 @@ class RationalAmiceMeasure:
             raise DomainError("normalized Amice denominator coefficients must be p-integral")
         b = min((valuation(c,field.p) for c in p.coefficients if c), default=0)
         for name,value in (("field",field),("numerator",p),("denominator",q),
-                           ("valuation_bound",b)):
+                           ("valuation_bound",b),("_unit_support",False)):
             object.__setattr__(self,name,value)
 
     @classmethod
@@ -93,7 +94,115 @@ class RationalAmiceMeasure:
         numerator = Polynomial()
         for point,weight in measure.atoms:
             numerator += weight * unit**(int(point)+offset)
-        return cls(measure.field,numerator,unit**offset)
+        result = cls(measure.field,numerator,unit**offset)
+        if all(valuation(point,measure.field.p) == 0 for point,_ in measure.atoms):
+            object.__setattr__(result,"_unit_support",True)
+        return result
+
+    def restrict_units(self, *, max_degree=4096):
+        """Exact restriction to Z_p^*, returning a rational Amice measure.
+
+        In z=1+T, subtract the Laurent-series section with exponents
+        divisible by p. Decimated recurrences compute this rational function
+        over Q, without numerical p-th roots of unity. max_degree limits
+        intermediate polynomial size; the native recurrence order is <=64.
+        """
+        _order(max_degree)
+        if self._unit_support or self.numerator.degree < 0:
+            return self
+        return self._restrict_units(max_degree)
+
+    @lru_cache(maxsize=64)
+    def _restrict_units(self, max_degree):
+        from ._rational_sections import zero_section
+        numerator,denominator = self.numerator.shift(-1),self.denominator.shift(-1)
+        top,bottom = zero_section(numerator,denominator,self.field.p,max_degree)
+        result = RationalAmiceMeasure(self.field,
+            (numerator*bottom-top*denominator).shift(1),
+            (denominator*bottom).shift(1))
+        object.__setattr__(result,"_unit_support",True)
+        return result
+
+    def mellin(self, exponent, *, branch=0, precision=None, max_terms=10000):
+        """Integral omega(x)**branch * <x>**s dmu on unit support.
+
+        Restriction must be explicit if the measure has nonunit support.
+        Absolute output precision defaults to the field precision, capped by
+        existing exponent digits (with the derivative's gain). Exact exponent
+        data may be evaluated at additional working precision. max_terms is a
+        resource limit; insufficient digits or terms raise PrecisionError.
+
+        Mahler coefficients of the kernel, extended by zero on nonunits,
+        have valuation >=v_p(n!) at odd p and >=floor(n/2)-1 at p=2.
+        Multiplication by the measure adds valuation_bound to the tail order.
+        """
+        if type(branch) is not int:
+            raise TypeError("Mellin branch must be an integer")
+        _order(max_terms)
+        target = self.field.precision if precision is None else precision
+        if type(target) is not int:
+            raise TypeError("precision must be an integer")
+        s = self.field(exponent)
+        if s.v < 0:
+            raise DomainError("Mellin exponent must lie in Z_p")
+        if not self._unit_support and self.restrict_units() != self:
+            raise DomainError("Mellin support must lie in Z_p^*; use restrict_units()")
+        p,b = self.field.p,self.valuation_bound
+        gain = 2 if p == 2 else 1
+        if isinstance(exponent,Padic):
+            available = s.precision+gain+b
+            if precision is not None and target > available:
+                raise PrecisionError("Mellin precision exceeds the available exponent digits")
+            target = min(target,available)
+        needed = target-b
+        if needed <= 0 or self.numerator.degree < 0:
+            return self.field.O(target)
+        digits = max(0,needed-gain)
+        if not isinstance(exponent,Padic) and s.precision < digits:
+            s = self.field(exponent,absprec=digits)
+        if p == 2:
+            count = 2*(needed+1)
+        else:
+            lo,hi = 1,p*needed
+            while lo < hi:
+                mid = (lo+hi)//2
+                n,v = mid,0
+                while n:
+                    n //= p
+                    v += n
+                if v >= needed:
+                    hi = mid
+                else:
+                    lo = mid+1
+            count = lo
+        if count > max_terms:
+            raise PrecisionError(f"Mellin needs {count} terms; max_terms={max_terms}")
+        modulus = p**needed
+        residue = s.residue(digits)
+        branch %= 2 if p == 2 else p-1
+        values = []
+        if p != 2:
+            # CRT chooses n=s mod p**digits and n=branch mod p-1.
+            power = residue+p**digits*((branch-residue) % (p-1))
+        for k in range(count):
+            if k % p == 0:
+                values.append(0)
+            elif p == 2:
+                sign = 1 if k % 4 == 1 else -1
+                values.append(sign**branch*pow(sign*k,residue,modulus) % modulus)
+            else:
+                values.append(pow(k,power,modulus))
+        # Forward differences compute Mahler coefficients; integer operations
+        # preserve the uniform modulus even when exponent errors are correlated.
+        moments = self.amice_series(count).coefficients
+        value = Fraction(0)
+        for moment in moments:
+            if moment:
+                value += self.field(values[0],absprec=needed)*moment
+            values = [(right-left) % modulus for left,right in zip(values,values[1:])]
+        if not isinstance(value,Padic):
+            value = self.field(value,absprec=target)
+        return value + self.field.O(target)
 
     def amice_series(self, order=10):
         """Exact first ``order`` binomial moments as a formal PowerSeries."""
@@ -176,13 +285,19 @@ class RationalAmiceMeasure:
         if not isinstance(other,RationalAmiceMeasure):
             return NotImplemented
         self._check(other)
-        return RationalAmiceMeasure(self.field,
+        result = RationalAmiceMeasure(self.field,
             self.numerator*other.denominator+other.numerator*self.denominator,
             self.denominator*other.denominator)
+        if self._unit_support and other._unit_support:
+            object.__setattr__(result,"_unit_support",True)
+        return result
 
     def scale(self, weight):
         """Multiply all measure values by an exact rational weight."""
-        return RationalAmiceMeasure(self.field,self.numerator*exact(weight),self.denominator)
+        result = RationalAmiceMeasure(self.field,self.numerator*exact(weight),self.denominator)
+        if self._unit_support:
+            object.__setattr__(result,"_unit_support",True)
+        return result
 
     def convolve(self, other):
         """Additive convolution: Amice transforms multiply."""

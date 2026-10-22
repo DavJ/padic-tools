@@ -71,3 +71,21 @@ def test_rational_measure_laplace_and_moments_against_pari(p,c):
     from math import factorial
     for n,c in enumerate(oracle[1:]):
         assert mu.moment(n) == (-1)**n*factorial(n)*c
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p", [3,5,7])
+def test_nonatomic_mellin_against_pari_kl_identity(p):
+    # A(T)=1/(2+T), restricted to units, has the following analytic Mellin
+    # identity on branch p-2. PARI evaluates its independent KL algorithm.
+    mu = RationalAmiceMeasure(Qp(p,14),1,[2,1]).restrict_units()
+    script = (
+        f"s=1/2+O({p}^32);\n"
+        f"print(lift((exp((s+1)*log(2+O({p}^32)))-1)*zeta(-s)));\nquit\n"
+    )
+    result = subprocess.run(["gp","-q","-f"],input=script,text=True,
+                            capture_output=True,check=True,timeout=20)
+    assert not result.stderr, result.stderr
+    value = mu.mellin(Fraction(1,2),branch=p-2)
+    assert value.precision == 14
+    assert value.contains(Fraction(result.stdout.strip()))
