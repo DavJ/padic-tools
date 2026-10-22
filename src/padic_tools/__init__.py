@@ -7,6 +7,10 @@ from .core import DomainError, Padic, PadicField, PrecisionError, Qp, exact, val
 from .analytic import cos, exp, log, log1p, power, sin, sqrt, teichmuller
 from .special import bernoulli, theta3, theta4, zeta_euler_value, zeta_p, zeta_special
 from .symbolic import Polynomial, PowerSeries, exp_series, hensel_lift, log1p_series, theta3_series
+from .extensions import (
+    QuadraticResidueElement, QuadraticResidueField,
+    UnramifiedQuadraticElement, UnramifiedQuadraticField,
+)
 from .transforms import AtomicMeasure
 from .measures import RationalAmiceMeasure
 from .taylor import TaylorExpansion, taylor
@@ -28,6 +32,8 @@ __all__ = [
     "exp", "log", "log1p", "sin", "cos", "sqrt", "power", "teichmuller",
     "bernoulli", "theta3", "theta4", "zeta_special", "zeta_euler_value", "zeta_p",
     "Polynomial", "PowerSeries", "hensel_lift", "exp_series", "log1p_series", "theta3_series",
+    "UnramifiedQuadraticField", "UnramifiedQuadraticElement",
+    "QuadraticResidueField", "QuadraticResidueElement",
     "AtomicMeasure", "RationalAmiceMeasure", "TaylorExpansion", "taylor",
     "CyclotomicValue", "PadicTestFunction", "additive_character", "additive_phase",
     "finite_fourier", "haar_volume",

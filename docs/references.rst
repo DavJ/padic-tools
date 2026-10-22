@@ -10,6 +10,15 @@ presented as establishing a new complex/p-adic zero correspondence.
   — absolute versus relative precision, valuation and numerical representations.
 * `Sage: p-adic generic elements <https://doc.sagemath.org/html/en/reference/padics/sage/rings/padics/padic_generic_element.html>`_
   — analytic domains, logarithm branches and precision behavior.
+* `Sage: Unramified Extension Generic
+  <https://doc.sagemath.org/html/en/reference/padics/sage/rings/padics/unramified_extension_generic.html>`_
+  — residue fields, generators, Galois structure and the unchanged uniformizer
+  in unramified extensions. The quadratic valuation and error derivations
+  for our ideal balls are given in :doc:`extensions`.
+* `Magma: Overview of the p-adics
+  <https://docs.magma-maths.org/LocalFields/PAdicRingsAndTheirExtensions/overview.html>`_
+  — absolute precision in uniformizer units and its scaling by the
+  ramification index when moving between local fields.
 * `NIST DLMF 20.2 <https://dlmf.nist.gov/20.2>`_
   — Jacobi theta definitions; our multiplicative argument convention is
   distinguished in :doc:`functions`.

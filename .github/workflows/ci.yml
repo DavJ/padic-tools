@@ -62,7 +62,7 @@ jobs:
       - run: python -m twine check dist/*
       - run: python -m venv /tmp/padic-wheel-check
       - run: /tmp/padic-wheel-check/bin/python -m pip install --no-deps dist/*.whl
-      - run: /tmp/padic-wheel-check/bin/python -c 'from padic_tools import Qp, zeta_p; assert zeta_p(-3,Qp(5)).is_congruent("-31/30")'
+      - run: /tmp/padic-wheel-check/bin/python -c 'from padic_tools import Qp, UnramifiedQuadraticField, zeta_p; assert zeta_p(-3,Qp(5)).is_congruent("-31/30"); L=UnramifiedQuadraticField(Qp(3),[1,0,1]); x=L(1,2); assert x.norm().contains(5); assert (x*x.inverse()).is_congruent(1); assert x.residue().frobenius()==x.residue()**3'
       - uses: actions/upload-artifact@v4
         with:
           name: distribution-packages
