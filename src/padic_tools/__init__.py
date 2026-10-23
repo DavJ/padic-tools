@@ -28,7 +28,7 @@ from .algebra import (
     Biquaternions, CliffordAlgebra, Gaussian, Hamilton, Multivector,
     QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra,
 )
-from .bridges import GaussianBridge, QuaternionBridge, RationalBridge, riemann_zeta
+from .bridges import GaussianBridge, GaussianLocalPlace, QuaternionBridge, RationalBridge, riemann_zeta
 
 __version__ = "0.1.0"
 __all__ = [
@@ -47,5 +47,5 @@ __all__ = [
     "VladimirovImage", "vladimirov",
     "QuadraticAlgebra", "QuadraticElement", "Gaussian", "QuaternionAlgebra", "Quaternion",
     "Hamilton", "Biquaternions", "CliffordAlgebra", "Multivector",
-    "RationalBridge", "GaussianBridge", "QuaternionBridge", "riemann_zeta",
+    "RationalBridge", "GaussianBridge", "GaussianLocalPlace", "QuaternionBridge", "riemann_zeta",
 ]

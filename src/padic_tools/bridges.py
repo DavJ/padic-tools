@@ -9,9 +9,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction
 
-from .core import DomainError, PadicField, exact
+from .core import DomainError, PadicField, exact, valuation
 from .analytic import sqrt
 from .algebra import Gaussian, QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra
+from .extensions import UnramifiedQuadraticField
+from .ramified import EisensteinQuadraticField
 
 
 def _complex_context(dps):
@@ -28,6 +30,87 @@ def _mp_rational(ctx, value):
     return ctx.mpf(q.numerator)/q.denominator
 
 
+def _local_target(target, absprec):
+    field = target.field if isinstance(target, GaussianLocalPlace) else target
+    if not isinstance(field, (PadicField, UnramifiedQuadraticField, EisensteinQuadraticField)):
+        raise TypeError("target must be a certified local field or GaussianLocalPlace")
+    n = field.precision if absprec is None else absprec
+    if type(n) is not int:
+        raise TypeError("absprec must be an integer in target uniformizer units")
+    return field, n
+
+
+@dataclass(frozen=True, init=False)
+class GaussianLocalPlace:
+    """A chosen embedding of exact Q[i] into its completion at p.
+
+    ``root_sign`` is required and is either +1 or -1. At split primes the
+    positive root lifts the smaller residue of sqrt(-1) modulo p. At inert
+    primes it is the recorded quadratic generator. At p=2 it is pi-1,
+    where pi**2-2*pi+2=0. The other sign gives the conjugate embedding.
+
+    ``absprec`` counts absolute powers of the target uniformizer: p for
+    odd primes, pi for p=2. Exact sources can be reevaluated at any precision.
+    """
+    base: PadicField
+    root_sign: int
+    field: object
+
+    def __init__(self, base: PadicField, *, root_sign):
+        if not isinstance(base, PadicField):
+            raise TypeError("base must be Qp")
+        if type(root_sign) is not int or root_sign not in (-1, 1):
+            raise ValueError("root_sign must be the integer +1 or -1")
+        if base.p == 2:
+            field = EisensteinQuadraticField(base, [2, -2, 1], name="pi")
+        elif base.p % 4 == 3:
+            field = UnramifiedQuadraticField(base, [1, 0, 1], name="i")
+        else:
+            field = base
+        object.__setattr__(self, "base", base)
+        object.__setattr__(self, "root_sign", root_sign)
+        object.__setattr__(self, "field", field)
+
+    @property
+    def kind(self):
+        """One of 'split', 'unramified', 'ramified'."""
+        return "ramified" if self.base.p == 2 else ("split" if self.base.p % 4 == 1 else "unramified")
+
+    @property
+    def ramification_index(self):
+        """The target's ramification index over Qp."""
+        return 2 if self.base.p == 2 else 1
+
+    @property
+    def residue_degree(self):
+        """The target's residue degree over Fp."""
+        return 2 if self.base.p % 4 == 3 else 1
+
+    def __call__(self, value=0, imag=0, *, absprec=None):
+        """Evaluate an exact Gaussian source, rounding once in the target."""
+        z = GaussianBridge(value, imag).value
+        field, n = _local_target(self, absprec)
+        a, b = z.a, self.root_sign*z.b
+        if self.base.p == 2:
+            return field(a-b, b, absprec=n)
+        if self.kind == "unramified":
+            return field(a, b, absprec=n)
+        if not b:
+            return field(a, absprec=n)
+        # b can lose digits; choose root precision before multiplying by b.
+        root_precision = max(1, n-valuation(b, self.base.p))
+        root = sqrt(self.base(-1, absprec=root_precision))
+        return field(a+b*root, absprec=n)
+
+    def generator_image(self, *, absprec=None):
+        """The chosen image of the central Gaussian i."""
+        return self(0, 1, absprec=absprec)
+
+    def conjugate(self):
+        """The opposite embedding; at split primes this swaps the two places."""
+        return GaussianLocalPlace(self.base, root_sign=-self.root_sign)
+
+
 @dataclass(frozen=True, init=False)
 class RationalBridge:
     """One exact q in Q, with independent complex and p-adic images."""
@@ -40,6 +123,11 @@ class RationalBridge:
         """The image in the specified finite precision Q_p."""
         return field(self.value)
 
+    def local(self, target, *, absprec=None):
+        """Image in a certified local field, at absolute uniformizer precision."""
+        field, n = _local_target(target, absprec)
+        return field(self.value, absprec=n)
+
     def complex(self, dps=50):
         """Complex image using an isolated mpmath context (complex extra)."""
         ctx = _complex_context(dps)
@@ -48,20 +136,31 @@ class RationalBridge:
 
 @dataclass(frozen=True, init=False)
 class GaussianBridge:
-    """An exact element of Q[i], with two distinct kinds of local image.
+    """An exact element of Q[i], with explicit choices of local image.
 
     ``padic_algebra`` always returns the quotient algebra Q_p[t]/(t^2+1).
     ``split_padic`` chooses a root of -1 in Q_p, possible only for p=1 mod 4.
-    At p=2 the quadratic field is ramified; no uniformizer arithmetic is
-    implemented by this coefficient-wise quotient representation.
+    ``local`` uses a GaussianLocalPlace and returns an actual local-field
+    ball, including ramified Q2(i), with uniformizer precision.
     """
     value: QuadraticElement
 
     def __init__(self, value=0, imag=0):
-        z = value if isinstance(value, QuadraticElement) else Gaussian(value, imag)
-        if z.parent != Gaussian:
-            raise TypeError("source must be exact Q[i], not p-adic coefficients")
+        if isinstance(value, QuadraticElement):
+            if value.parent != Gaussian:
+                raise TypeError("source must be exact Q[i], not p-adic coefficients")
+            if exact(imag):
+                raise TypeError("imag must be zero when passing a Gaussian element")
+            z = Gaussian(exact(value.a), exact(value.b))
+        else:
+            z = Gaussian(value, imag)
         object.__setattr__(self, "value", z)
+
+    def local(self, place: GaussianLocalPlace, *, absprec=None):
+        """Evaluate in the specified place, with absolute target precision."""
+        if not isinstance(place, GaussianLocalPlace):
+            raise TypeError("Gaussian images require an explicit GaussianLocalPlace")
+        return place(self.value, absprec=absprec)
 
     def complex(self, dps=50):
         """Chosen archimedean embedding sending i to the usual complex i."""
@@ -95,8 +194,31 @@ class QuaternionBridge:
     value: Quaternion
 
     def __post_init__(self):
-        if not isinstance(self.value, Quaternion) or self.value.parent.base not in (exact, Gaussian):
+        if (not isinstance(self.value, Quaternion)
+                or not isinstance(self.value.parent, QuaternionAlgebra)
+                or self.value.parent.base not in (exact, Gaussian)):
             raise TypeError("source must be a quaternion over Q or exact Q[i]")
+        if len(self.value.coefficients) != 4:
+            raise TypeError("a quaternion source requires four exact coefficients")
+        converter = exact if self.value.parent.base == exact else lambda c: GaussianBridge(c).value
+        coefficients = tuple(converter(c) for c in self.value.coefficients)
+        object.__setattr__(self, "value", Quaternion(self.value.parent, coefficients))
+
+    def local(self, target, *, absprec=None):
+        """Base change to a certified field, choosing a place for Q[i].
+
+        All four coefficients start at the same absolute target precision.
+        Quaternion conjugation and reduced norm stay over that scalar field.
+        """
+        field, n = _local_target(target, absprec)
+        if self.value.parent.base == Gaussian:
+            if not isinstance(target, GaussianLocalPlace):
+                raise TypeError("biquaternion coefficients require a GaussianLocalPlace")
+            mapper = lambda c: target(c, absprec=n)
+        else:
+            mapper = lambda c: field(c, absprec=n)
+        algebra = QuaternionAlgebra(field, self.value.parent.a, self.value.parent.b)
+        return self.value.map_coefficients(algebra, mapper)
 
     def padic(self, field: PadicField):
         """Coefficient-wise image over Q_p or Q_p[t]/(t^2+1)."""

@@ -22,7 +22,11 @@ def _exact_zero(x):
 
 
 def _congruent(a, b, precision=None):
-    return a.is_congruent(b, precision) if hasattr(a, "is_congruent") else a == b
+    if hasattr(a, "is_congruent"):
+        return a.is_congruent(b, precision)
+    if hasattr(b, "is_congruent"):
+        return b.is_congruent(a, precision)
+    return a == b
 
 
 @dataclass(frozen=True)
@@ -408,9 +412,19 @@ class Multivector:
         """Clifford conjugation, the composition of reverse and involution."""
         return self.reverse().involute()
 
+    def map_coefficients(self, target: CliffordAlgebra, mapper=None):
+        """Change scalar base through an explicit map, preserving the metric."""
+        if not isinstance(target, CliffordAlgebra):
+            raise TypeError("target must be a CliffordAlgebra")
+        if self.parent.metric != target.metric:
+            raise DomainError("Clifford coefficient maps must preserve the metric")
+        f = target.base if mapper is None else mapper
+        return target({m: f(c) for m, c in self.coefficients.items()})
+
     def is_congruent(self, other, precision=None):
         other = self._coerce(other)
-        zero = self.parent.base(0)
+        # A missing blade is exact zero; converting it would cap precision.
+        zero = 0
         return all(_congruent(self.coefficients.get(m, zero), other.coefficients.get(m, zero), precision)
                    for m in set(self.coefficients) | set(other.coefficients))
 
@@ -422,4 +436,7 @@ class Multivector:
             raise DomainError("only the even subalgebra maps to Hamilton quaternions")
         H, c = QuaternionAlgebra(self.parent.base), self.coefficients
         z = self.parent.base(0)
+        known = [value for value in c.values() if hasattr(value, "precision")]
+        if known:
+            z = max(known, key=lambda value: value.precision)*0
         return H(c.get(0, z), c.get(6, z), -c.get(5, z), -c.get(3, z))
