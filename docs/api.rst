@@ -90,3 +90,9 @@ Explicit bridges
 
 .. automodule:: padic_tools.bridges
    :members:
+
+Matrices and linear systems
+---------------------------
+
+.. automodule:: padic_tools.linalg
+   :members:

@@ -44,6 +44,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Wavelets and operators | Exact finite Kozyrev bases and reconstruction, whole-Qp integer-order Vladimirov images with analytic tails, conservative ball generators and numerical diffusion |
 | Algebraic bridges | Q and Q[i] to independent completions; chosen split, unramified and ramified local-field images; rational quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
+| Linear algebra | Exact Q/Q[i] and local-field matrices; division-free determinants, certified square solves/inverses and condition exponents |
 
 ## Unramified quadratic fields
 
@@ -118,6 +119,30 @@ at primes congruent to 3 modulo 4. `root_sign` explicitly chooses the
 generator image. See [chosen local places](docs/local_bridges.rst) for
 guard digits, conjugations, algebraic norms and the Clifford commuting square.
 Extension analytic functions remain a later step.
+
+## Matrices and certified linear systems
+
+```python
+from padic_tools import Matrix, exact
+
+A = Matrix(exact, [[1, 2], [3, 7]])
+assert A.solve([1, 0]) == (7, -3)
+assert A @ A.inverse() == Matrix.identity(exact, 2)
+
+D = Matrix(Qp(3, 12), [[9, 0], [0, 243]], absprec=21)
+report = D.solve_with_info([1, 1])
+assert report.pivot_valuations == (2, 5)
+assert report.condition_exponent == 3
+assert report.precisions == (14, 11)
+assert D.inverse().precisions == ((17, 14), (14, 11))
+```
+
+Local matrices represent whole families of entry balls. Complete pivoting
+checks valuation lower bounds, preserves uncertain zero entries and reports
+insufficient precision explicitly. Exact sources can be reevaluated through
+the Gaussian local places. See [linear algebra](docs/linalg.rst) for the
+enclosure proof, condition normalization, scope and independent checks.
+Run `python examples/linear_systems.py` for a standalone example.
 
 ## Transforms and Taylor expansions
 

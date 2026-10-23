@@ -66,6 +66,7 @@ jobs:
           /tmp/padic-wheel-check/bin/python - <<'PY'
           from padic_tools import Qp, Q2i, UnramifiedQuadraticField, zeta_p
           from padic_tools import Biquaternions, CliffordAlgebra, Gaussian, GaussianLocalPlace, QuaternionBridge
+          from padic_tools import Matrix, exact
           assert zeta_p(-3,Qp(5)).is_congruent("-31/30")
           L = UnramifiedQuadraticField(Qp(3),[1,0,1])
           x = L(1,2)
@@ -86,6 +87,17 @@ jobs:
               mapped = q.to_clifford().map_coefficients(C, lambda c: place(c, absprec=17))
               assert mapped.is_congruent(local.to_clifford(), 17)
               assert local.norm().is_congruent(place(q.norm(), absprec=17))
+          M = Matrix(exact, [[1,2],[3,7]])
+          assert M.solve([1,0]) == (7,-3)
+          for base in (Qp(3,3), Q2i(3)):
+              A = Matrix(base, [[1,2],[3,7]], absprec=19)
+              assert A.inverse().contains(M.inverse())
+              assert min(c.precision for row in A.inverse() for c in row) >= 19
+              assert all(x.contains(y) for x,y in zip(A.solve([1,0]), (7,-3)))
+          D = Matrix(Qp(3,12), [[9,0],[0,243]], absprec=21)
+          report = D.solve_with_info([1,1])
+          assert report.pivot_valuations == (2,5) and report.condition_exponent == 3
+          assert report.precisions == (14,11)
           PY
       - uses: actions/upload-artifact@v4
         with:

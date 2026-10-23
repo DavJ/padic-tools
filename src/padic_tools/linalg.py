@@ -269,6 +269,9 @@ class Matrix:
             if precision is not None:
                 raise TypeError("exact matrices have no congruence precision")
             return self == other
+        if precision is not None and any(c.precision < precision
+                                         for matrix in (self, other) for row in matrix.rows for c in row):
+            raise PrecisionError("requested matrix congruence exceeds an entry's known precision")
         return all(a.is_congruent(b, precision) for x, y in zip(self.rows, other.rows) for a, b in zip(x, y))
 
     def contains(self, rows):
@@ -278,7 +281,8 @@ class Matrix:
             raise ValueError("membership requires matching shapes")
         if not isinstance(self.base, _LOCAL_FIELDS):
             return self == Matrix(self.base, source)
-        return all(a.contains(b) for x, y in zip(self.rows, source) for a, b in zip(x, y))
+        checks = [a.contains(b) for x, y in zip(self.rows, source) for a, b in zip(x, y)]
+        return all(checks)
 
     def solve(self, rhs):
         """Solve A*x=rhs, returning a tuple for a vector or Matrix for many RHS.

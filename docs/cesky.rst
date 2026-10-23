@@ -295,6 +295,47 @@ koeficientů tím neprovádí. Redukovaná norma zůstává v koeficientovém po
 Cliffordovy algebry komutuje s těmito skalárními mapami. Úplné příklady a
 odvození přesnosti jsou v :doc:`kapitole o lokálních místech <local_bridges>`.
 
+Matice a lineární soustavy
+--------------------------
+
+``Matrix(exact, rows)`` používá přesné racionální koeficienty;
+``Matrix(Gaussian, rows)`` přesná čísla z Q[i]. Numerická varianta přijímá
+Qp i obě kvadratická lokální pole. Součin matic je ``@``, skalární
+násobení ``*``. K dispozici jsou transpozice, stopa, determinant, inverze
+a řešení čtvercových regulárních soustav s jednou či více pravými stranami.
+
+.. doctest::
+
+   >>> A = Matrix(exact, [[1, 2], [3, 7]])
+   >>> A.solve([1, 0])
+   (Fraction(7, 1), Fraction(-3, 1))
+   >>> A@A.inverse() == Matrix.identity(exact, 2)
+   True
+   >>> D = Matrix(Qp(3, 12), [[9, 0], [0, 243]], absprec=21)
+   >>> report = D.solve_with_info([1, 1])
+   >>> report.pivot_valuations, report.condition_exponent
+   ((2, 5), 3)
+   >>> report.precisions
+   (14, 11)
+   >>> D.inverse().precisions
+   ((17, 14), (14, 11))
+
+Lokální matice reprezentuje všechny nezávislé volby prvků vstupních koulí.
+Nulový střed tedy není přesná nula. Úplná pivotace vybírá známou nenulovou
+hodnotu s nejmenší valuací a kontroluje i dolní meze nejistých nul. Pokud
+známé číslice nestačí, solver vrátí ``PrecisionError``. Úspěšný výpočet
+zaručuje, že výsledné koule obsahují řešení pro všechny reprezentované
+vstupy. Exaktní singulární soustava nad Q či Q[i] vrací ``ZeroDivisionError``.
+
+Podmíněnost a absolutní přesnost výsledku jsou různé údaje. Rozdíl krajních
+pivotových valuací udává exponent podmíněnosti v jednotkách uniformizátoru.
+``base_condition_exponent`` jej dělí indexem rozvětvení: nad Q2(i) může být
+poločíselný. Přesnost se šíří samostatně pro každou složku. Determinant
+používá algoritmus bez dělení, takže jej lze vypočítat i při nejasné
+regularitě. Obecné hodnosti, jádra, obdélníkové řešení a vlastní čísla
+zůstávají dalším krokem. Odvození a příklady jsou v
+:doc:`kapitole o lineární algebře <linalg>`.
+
 Geometrická algebra
 -------------------
 

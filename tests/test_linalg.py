@@ -188,6 +188,10 @@ def test_high_precision_outputs_do_not_inherit_parent_default(base):
         with pytest.raises(PrecisionError):
             op()
     assert A.truncate(7).precisions == ((7, 7), (7, 7))
+    mixed = Matrix(base, [[base(2, absprec=19), base(2, absprec=19)],
+                          [base(3, absprec=19), base(7, absprec=3)]])
+    with pytest.raises(PrecisionError):
+        A.is_congruent(mixed, 17)  # A first-entry mismatch cannot hide missing later digits.
     scale = 2 if base.p == 2 else 3
     assert (A*F(1, scale))[0, 0].precision == 19-(2 if base.p == 2 else 1)
 
@@ -291,5 +295,7 @@ def test_insufficient_precision_is_not_an_exact_singularity_claim(p):
         singular.solve([1, 1])
     with pytest.raises(TypeError):
         Matrix(K, [[1]]).contains([[K(1)]])
+    with pytest.raises(TypeError):
+        Matrix(K, [[1, 1]]).contains([[2, K(1)]])
     with pytest.raises(TypeError):
         Matrix(K, [[1]]).solve([Qp(7)(1)])
