@@ -249,7 +249,8 @@ approximation or a finite residue as exact source data:
    >>> (image*image).contains(square.a-square.b, square.b)
    True
 
-Dedicated Gaussian/quaternion bridge adapters are the next step. The
+The :doc:`local_bridges` adapters now evaluate Gaussian and (bi)quaternion
+sources in this field with explicit orientation and absolute precision. The
 existing coefficient-algebra bridge methods keep their documented return
 types. Arbitrary ramified polynomials need a certified change to an
 integral uniformizer basis; higher extension degrees, extension analytic

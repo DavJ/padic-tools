@@ -42,7 +42,7 @@ assert z.is_congruent(Fraction(-31, 30))
 | Taylor | Exact polynomial shifts and rational jets; local p-adic exp/log/log1p/sin/cos and polynomial expansions with whole-tail enclosures |
 | Harmonic analysis | Exact additive characters, real Haar integration, finite Fourier transforms, compactly supported test functions, inversion, Parseval and convolution |
 | Wavelets and operators | Exact finite Kozyrev bases and reconstruction, whole-Qp integer-order Vladimirov images with analytic tails, conservative ball generators and numerical diffusion |
-| Algebraic bridges | Q and Q[i] to independent completions, chosen split Gaussian places, rational/p-adic quaternions and biquaternions |
+| Algebraic bridges | Q and Q[i] to independent completions; chosen split, unramified and ramified local-field images; rational quaternions and biquaternions |
 | Geometric algebra | Diagonal Clifford algebras, grades, geometric/wedge products, involutions, explicit Hamilton-even-Clifford isomorphism |
 
 ## Unramified quadratic fields
@@ -66,7 +66,7 @@ quadratic extension of Q2. Each element is a whole ideal ball with common
 coordinate precision, including negative valuations. `norm()` is algebraic;
 `absolute_value()` is the p-adic magnitude. See [the extension chapter](docs/extensions.rst)
 for error bounds, exact residues and scope. Higher degrees, extension
-analytic functions and dedicated bridge adapters are subsequent steps.
+analytic functions are subsequent steps; dedicated field adapters are included.
 
 ## Ramified Q2(i) and Eisenstein fields
 
@@ -93,8 +93,31 @@ give staggered base-coordinate precisions. Norm and trace return Qp balls
 in base p units, with bounds that account for the different, including wild
 dyadic ramification. `absolute_value_squared()` gives the exact rational
 square of the base-compatible magnitude. See [the ramified chapter](docs/ramified.rst)
-for the derivation and explicit Gaussian source conversion. Dedicated
-bridge adapters and extension analytic functions remain later steps.
+for the derivation and explicit Gaussian source conversion.
+
+## Chosen Gaussian and quaternion local places
+
+```python
+from padic_tools import Gaussian, GaussianBridge, GaussianLocalPlace, Biquaternions
+from padic_tools import QuaternionBridge, CliffordAlgebra
+
+place = GaussianLocalPlace(Qp(2, 12), root_sign=1)  # i -> pi-1 in Q2(i)
+source = GaussianBridge(Fraction(1, 3), 2)
+image = source.local(place, absprec=19)  # Absolute powers of pi
+assert image.precision == 19 and image.contains(Fraction(-5, 3), 2)
+assert image.norm().contains(source.value.norm())
+
+q = Biquaternions(Gaussian(1, 2), Gaussian(3, -1), 0, 1)
+local_q = QuaternionBridge(q).local(place)
+C = CliffordAlgebra((1, 1, 1), place.field)
+assert q.to_clifford().map_coefficients(C, place).is_congruent(local_q.to_clifford())
+```
+
+The same API selects Qp at split primes and an unramified quadratic field
+at primes congruent to 3 modulo 4. `root_sign` explicitly chooses the
+generator image. See [chosen local places](docs/local_bridges.rst) for
+guard digits, conjugations, algebraic norms and the Clifford commuting square.
+Extension analytic functions remain a later step.
 
 ## Transforms and Taylor expansions
 

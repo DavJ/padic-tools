@@ -8,7 +8,49 @@ from fractions import Fraction
 import shutil
 import subprocess
 import pytest
-from padic_tools import AtomicMeasure, BallVladimirov, EisensteinQuadraticField, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
+from padic_tools import AtomicMeasure, BallVladimirov, EisensteinQuadraticField, Gaussian, GaussianLocalPlace, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,sign", [(5, 1), (5, -1), (13, 1), (13, -1)])
+def test_split_gaussian_place_and_guard_digits_against_pari(p, sign):
+    script = (
+        f"p={p};r=sqrt(-1+O(p^60));if(lift(r)%p>p/2,r=-r);\n"
+        f"z=1/p^6-2*{sign}*r/p^5;\n"
+        f"print(lift(z));print(lift(1/z));print(lift({sign}*r));quit\n"
+    )
+    result = subprocess.run(["gp", "-q", "-f"], input=script, text=True,
+                            capture_output=True, check=True, timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 3
+    place = GaussianLocalPlace(Qp(p, 4), root_sign=sign)
+    image = place(Gaussian(Fraction(1, p**6), Fraction(-2, p**5)), absprec=11)
+    assert image.precision == 11 and image.contains(oracle[0])
+    assert image.inverse().contains(oracle[1])
+    assert place.generator_image(absprec=13).contains(oracle[2])
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,sign", [(2, 1), (2, -1), (3, 1), (3, -1)])
+def test_nonsplit_gaussian_places_against_pari_quotients(p, sign):
+    polynomial, root = ("t^2-2*t+2", "(t-1)") if p == 2 else ("t^2+1", "t")
+    script = (
+        f"p={p};z=Mod((1/p^3+O(p^40))+{sign}*(2/p^2+O(p^40))*{root},{polynomial});\n"
+        "print(lift(polcoef(lift(z),0)));print(lift(polcoef(lift(z),1)));\n"
+        "w=1/z;print(lift(polcoef(lift(w),0)));print(lift(polcoef(lift(w),1)));\n"
+        "print(lift(norm(z)));print(lift(trace(z)));quit\n"
+    )
+    result = subprocess.run(["gp", "-q", "-f"], input=script, text=True,
+                            capture_output=True, check=True, timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 6
+    place = GaussianLocalPlace(Qp(p, 4), root_sign=sign)
+    image = place(Gaussian(Fraction(1, p**3), Fraction(2, p**2)), absprec=19)
+    assert image.precision == 19 and image.contains(tuple(oracle[:2]))
+    assert image.inverse().contains(tuple(oracle[2:4]))
+    assert image.norm().contains(oracle[4]) and image.trace().contains(oracle[5])
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")

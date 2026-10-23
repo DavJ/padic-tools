@@ -37,6 +37,9 @@ Implemented
   exp/log/log1p/sin/cos.
 * Rational/Gaussian diagonal bridges, selected split places, quaternion and
   biquaternion scalar base changes, and an explicit even-Clifford isomorphism.
+* Chosen Gaussian local-field embeddings at all primes, with absolute
+  uniformizer precision, rational/quaternion/biquaternion field adapters
+  and compatible sparse Clifford coefficient maps.
 * Exact additive characters, real Haar volumes/integration, finite Fourier
   transforms and compactly supported locally constant functions on Qp with
   rational/cyclotomic source values; exact inversion, Parseval and convolution.
@@ -51,8 +54,7 @@ Next mathematical features
 
 1. Broader independent Sage/PARI oracle coverage and performance baselines,
    particularly around KL branches and near poles.
-2. Dedicated Gaussian/quaternion bridge adapters for local fields,
-   higher-degree unramified/Eisenstein extensions and certified changes of
+2. Higher-degree unramified/Eisenstein extensions and certified changes of
    ramified power basis. Both degree-two field engines already propagate
    ideal precision; formal coefficient algebras retain their wider scope.
 3. Singular Hensel lifting, general polynomial factorization, matrix solvers
