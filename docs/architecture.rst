@@ -30,7 +30,7 @@ Architecture and contribution guide
    * - ``algebra``
      - Scalar-generic quadratic, quaternion and diagonal Clifford algebras
    * - ``bridges``
-     - Common exact sources, independent completion images and complex evaluation
+     - Common exact sources, chosen Gaussian local places, scalar base changes and complex evaluation
 
 The first four modules depend only on Python's standard library. Importing
 ``padic_tools`` does not import SymPy, mpmath or Sphinx. Exact rational
@@ -69,6 +69,11 @@ generators, and which operations are preserved. Tests should compare
 An analytic bridge also needs an argument that the relevant limits and
 convergence domains are compatible. The quaternion/Clifford bridge is
 algebraic and does not make that extra analytic claim.
+
+``GaussianLocalPlace`` chooses a certified field and the image of the
+central Gaussian generator. Its ``local`` adapters use absolute target
+uniformizer precision; see :doc:`local_bridges`. Sparse missing Clifford
+blades are exact zero; stored local zero balls retain finite uncertainty.
 
 Validation commands
 -------------------

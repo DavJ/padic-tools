@@ -232,8 +232,7 @@ normy a stopy mají naproti tomu přesnost v mocninách 2, protože leží v Q2.
 Obecnější ``EisensteinQuadraticField`` ověřuje Eisensteinův kvadratický
 polynom a funguje i nad lichými prvočísly. Odvození přesnosti, příklady
 se zápornou valuací a převod přesného gaussovského zdroje najdeš v
-:doc:`kapitole o rozvětvených polích <ramified>`. Dedikované adaptéry
-Gaussian a quaternion bridge jsou další samostatný krok.
+:doc:`kapitole o rozvětvených polích <ramified>`.
 
 Jak funguje bridge
 ------------------
@@ -258,6 +257,43 @@ stávající metoda ``padic_algebra`` nadále vrací koeficientovou algebru.
 U p=2 je rozšíření rozvětvené a ``Q2i`` už poskytuje jeho vlastní polní
 aritmetiku s uniformizátorem. Metoda ``padic_algebra`` nadále vrací formální
 kvadratickou algebru. Rozlišení pole a rozštěpené algebry je podstatné.
+
+Nové ``GaussianLocalPlace`` vybírá skutečné lokální pole a obraz i.
+Povinné ``root_sign=1`` nebo ``root_sign=-1`` určuje orientaci. Nad Q2
+je kladný obraz pi-1, pro p=3 mod 4 generátor nerozvětveného pole a pro
+p=1 mod 4 odmocnina -1, jejíž počáteční zbytek je menší ze dvou kořenů.
+``place.conjugate()`` obrací znaménko. Ve štěpeném případě tím přecházíme
+do druhého místa; v ostatních případech jde o sdružené vnoření do téhož pole.
+
+.. doctest::
+
+   >>> place = GaussianLocalPlace(Qp(2, 12), root_sign=1)
+   >>> source = GaussianBridge(Fraction(1, 3), 2)
+   >>> image = source.local(place, absprec=19)
+   >>> image.contains(Fraction(-5, 3), 2)
+   True
+   >>> (image.precision, tuple(c.precision for c in image.coefficients))
+   (19, (10, 9))
+   >>> image.norm().contains(source.value.norm())
+   True
+   >>> v5 = GaussianLocalPlace(Qp(5), root_sign=1)
+   >>> g = Gaussian(1, 2)
+   >>> (v5(g)*v5.conjugate()(g)).is_congruent(5)
+   True
+
+``absprec`` je absolutní přesnost v mocninách uniformizátoru cílového pole,
+tedy pi nad Q2(i) a p v ostatních případech. Přesný zdroj lze znovu
+vyhodnotit s vyšší přesností; zaokrouhlenému výsledku nelze číslice doplnit.
+Algebraická gaussovská norma je součin obrazů v obou vnořeních.
+``Padic.norm()`` naproti tomu vrací p-adickou absolutní hodnotu.
+
+Racionální ``QuaternionBridge.local`` může cílit přímo do ověřeného pole.
+Bikvaternionový zdroj vyžaduje ``GaussianLocalPlace`` kvůli centrálnímu i.
+Kvaternionová konjugace neguje tři vektorové složky; gaussovskou konjugaci
+koeficientů tím neprovádí. Redukovaná norma zůstává v koeficientovém poli.
+``Multivector.map_coefficients`` zachovává metriku a převod do sudé části
+Cliffordovy algebry komutuje s těmito skalárními mapami. Úplné příklady a
+odvození přesnosti jsou v :doc:`kapitole o lokálních místech <local_bridges>`.
 
 Geometrická algebra
 -------------------

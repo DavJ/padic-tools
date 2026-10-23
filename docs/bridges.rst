@@ -57,6 +57,8 @@ Q[i] and chosen local places
      - Coefficient base change Q[i] -> Qp[t]/(t^2+1), with coefficient ball errors
    * - ``split_padic(K, root_sign=...)``
      - A chosen place i -> +sqrt(-1) or -sqrt(-1), when the root lies in Qp
+   * - ``local(place, absprec=...)``
+     - A certified local-field ball in an explicitly chosen GaussianLocalPlace
 
 For p congruent to 1 modulo 4, -1 is a square in Qp. The two split place
 choices are explicit, and the quadratic quotient is Qp x Qp, not a field.
@@ -67,7 +69,8 @@ now supplies valuation, uniformizer, residues and ideal-ball precision for
 the unramified case. The existing bridge methods retain their coefficient
 algebra return types. The separate :doc:`ramified` engine also supplies
 Q2(i) using pi=1+i, with Gaussian coordinate conversion (a,b) -> (a-b,b).
-Dedicated bridge adapters are subsequent steps.
+The :doc:`local_bridges` adapters now select the actual field in all three
+cases, with absolute uniformizer precision and explicit orientation.
 
 .. doctest::
 
@@ -121,6 +124,11 @@ coefficients, not a single complex number. Its ``padic`` method returns
 four Qp coefficients or four coefficients in Qp[t]/(t^2+1), according to
 the exact source. Arbitrary real/complex quaternion samples have no implicit
 exact p-adic image.
+
+``QuaternionBridge.local`` returns coefficients in certified local fields.
+For biquaternions it requires a ``GaussianLocalPlace``; rational sources
+can also target a field directly. See :doc:`local_bridges` for precision,
+the different conjugations/norms and the Clifford commuting square.
 
 The geometric-algebra identification
 ------------------------------------
@@ -177,6 +185,8 @@ What commutes, and what remains open
      - Implemented; ring operations preserved, with stated approximation errors
    * - Q[i] -> chosen split place / quadratic quotient
      - Implemented, with place and split-field distinctions explicit
+   * - Q[i] and (bi)quaternions -> certified local fields
+     - Implemented for chosen split, unramified and ramified Gaussian embeddings
    * - Quaternion multiplication -> even Clifford multiplication
      - Explicit isomorphism, tested on basis elements and general coefficients
    * - Algebraic zeta special values -> KL interpolation
