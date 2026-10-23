@@ -15,30 +15,30 @@ the target and generator image are:
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 28 32 10 10
+   :widths: 25 25 30 20
 
    * - Prime
-     - ``place.field``
+     - Target
      - Image of i
-     - e
-     - f
+     - (e, f)
    * - p = 1 mod 4
      - Qp
-     - s*r, r^2=-1; r lifts the smaller root modulo p
-     - 1
-     - 1
+     - s*r
+     - (1, 1)
    * - p = 3 mod 4
-     - UnramifiedQuadraticField, t^2+1=0
+     - Qp(t)
      - s*t
-     - 1
-     - 2
+     - (1, 2)
    * - p = 2
-     - EisensteinQuadraticField, pi^2-2*pi+2=0
+     - Q2(pi)
      - s*(pi-1)
-     - 2
-     - 1
+     - (2, 1)
 
 Here e is the ramification index and f the residue degree over Qp.
+The split root r satisfies r^2=-1 and lifts the smaller root modulo p.
+The unramified generator t satisfies t^2+1=0, while pi^2-2*pi+2=0
+defines the ramified uniformizer. ``place.field`` is respectively Qp,
+``UnramifiedQuadraticField`` or ``EisensteinQuadraticField``.
 In the nonsplit cases the two signs give conjugate embeddings into the
 same presented completion, rather than two different primes of Q[i].
 At split primes they choose the two distinct places. Explicit generator
