@@ -9,6 +9,54 @@ import shutil
 import subprocess
 import pytest
 from padic_tools import AtomicMeasure, BallVladimirov, EisensteinQuadraticField, Gaussian, GaussianLocalPlace, PadicTestFunction, Qp, RationalAmiceMeasure, UnramifiedQuadraticField, exp, finite_fourier, log, taylor, zeta_p
+from padic_tools import Matrix
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p", [2, 3, 5, 7])
+def test_qp_matrix_inverse_solve_and_determinant_against_pari(p):
+    script = (
+        f"p={p};A=[p^2,1,1/p;0,p,2;1,0,1+p]+matrix(3,3,i,j,O(p^40));\n"
+        "b=[1/p,2,3]~+vector(3,i,O(p^40))~;J=A^-1;x=J*b;\n"
+        "print(lift(matdet(A)));for(i=1,3,for(j=1,3,print(lift(J[i,j]))));\n"
+        "for(i=1,3,print(lift(x[i])));quit\n"
+    )
+    result = subprocess.run(["gp", "-q", "-f"], input=script, text=True,
+                            capture_output=True, check=True, timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 13
+    A = Matrix(Qp(p, 4), [[p*p, 1, Fraction(1, p)], [0, p, 2], [1, 0, 1+p]], absprec=17)
+    assert A.determinant().contains(oracle[0])
+    assert A.inverse().contains([oracle[1+i*3:4+i*3] for i in range(3)])
+    assert all(x.contains(y) for x, y in zip(A.solve([Fraction(1, p), 2, 3]), oracle[10:]))
+
+
+@pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")
+@pytest.mark.parametrize("p,sign", [(2, -1), (2, 1), (3, -1), (3, 1)])
+def test_quadratic_matrix_inverse_and_solve_against_pari(p, sign):
+    polynomial, root = ("t^2-2*t+2", "(t-1)") if p == 2 else ("t^2+1", "t")
+    script = (
+        f"p={p};s={sign};r={root};f={polynomial};\n"
+        "g(a,b)=Mod((a+O(p^40))+s*(b+O(p^40))*r,f);\n"
+        "A=[g(1,1),g(2,-1);g(3,1),g(1,2)];b=[g(1,-1),g(2,1)]~;J=A^-1;x=J*b;d=matdet(A);\n"
+        "print(lift(polcoef(lift(d),0)));print(lift(polcoef(lift(d),1)));\n"
+        "for(i=1,2,for(j=1,2,print(lift(polcoef(lift(J[i,j]),0)));print(lift(polcoef(lift(J[i,j]),1)))));\n"
+        "for(i=1,2,print(lift(polcoef(lift(x[i]),0)));print(lift(polcoef(lift(x[i]),1))));quit\n"
+    )
+    result = subprocess.run(["gp", "-q", "-f"], input=script, text=True,
+                            capture_output=True, check=True, timeout=20)
+    assert not result.stderr, result.stderr
+    oracle = [Fraction(line) for line in result.stdout.splitlines()]
+    assert len(oracle) == 14
+    pairs = list(zip(oracle[::2], oracle[1::2]))
+    place = GaussianLocalPlace(Qp(p, 4), root_sign=sign)
+    source = Matrix(Gaussian, [[Gaussian(1, 1), Gaussian(2, -1)], [Gaussian(3, 1), Gaussian(1, 2)]])
+    A = source.map_coefficients(place.field, lambda c: place(c, absprec=17))
+    assert A.determinant().contains(pairs[0])
+    assert A.inverse().contains([pairs[1:3], pairs[3:5]])
+    rhs = [place(Gaussian(1, -1), absprec=17), place(Gaussian(2, 1), absprec=17)]
+    assert all(x.contains(y) for x, y in zip(A.solve(rhs), pairs[5:]))
 
 
 @pytest.mark.skipif(shutil.which("gp") is None, reason="optional PARI/GP executable not installed")

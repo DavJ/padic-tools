@@ -87,6 +87,19 @@ presented as establishing a new complex/p-adic zero correspondence.
 * `Sage: Quaternion algebras
   <https://doc.sagemath.org/html/en/reference/algebras/sage/algebras/quatalg/quaternion_algebra.html>`_
   — quaternion algebra construction over a base field.
+* `Caruso, Roe and Vaccon: p-Adic Stability in Linear Algebra
+  <https://arxiv.org/abs/1506.05644>`_
+  — matrix precision models and the benefits of lattice precision. Our
+  native :doc:`linalg` engine uses conservative independent entry balls.
+* `Kulkarni: Solving p-adic polynomial systems via iterative eigenvector algorithms
+  <https://arxiv.org/abs/1907.03740>`_
+  — section 2 defines the sup-norm condition number, integral unimodular
+  transformations and p-adic QR/Smith factorizations. Our complete-pivot
+  enclosure and condition certificate are explained in :doc:`linalg`.
+* `Sage: Base class for matrices, part 2
+  <https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix2.html>`_
+  — the division-free characteristic-polynomial setting. Our determinant
+  implementation states its Berkowitz recurrence in :doc:`linalg`.
 * `Sage: Clifford algebras
   <https://doc.sagemath.org/html/en/reference/algebras/sage/algebras/clifford_algebra.html>`_
   — general Clifford relations, dimension and universal property.

@@ -29,6 +29,7 @@ from .algebra import (
     QuadraticAlgebra, QuadraticElement, Quaternion, QuaternionAlgebra,
 )
 from .bridges import GaussianBridge, GaussianLocalPlace, QuaternionBridge, RationalBridge, riemann_zeta
+from .linalg import LinearSolveResult, Matrix
 
 __version__ = "0.1.0"
 __all__ = [
@@ -48,4 +49,5 @@ __all__ = [
     "QuadraticAlgebra", "QuadraticElement", "Gaussian", "QuaternionAlgebra", "Quaternion",
     "Hamilton", "Biquaternions", "CliffordAlgebra", "Multivector",
     "RationalBridge", "GaussianBridge", "GaussianLocalPlace", "QuaternionBridge", "riemann_zeta",
+    "Matrix", "LinearSolveResult",
 ]

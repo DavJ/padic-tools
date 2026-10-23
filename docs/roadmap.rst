@@ -40,6 +40,9 @@ Implemented
 * Chosen Gaussian local-field embeddings at all primes, with absolute
   uniformizer precision, rational/quaternion/biquaternion field adapters
   and compatible sparse Clifford coefficient maps.
+* Exact Q/Q[i] and local-field dense matrices, scalar/matrix arithmetic,
+  division-free determinants, certified square solves and inverses,
+  complete pivoting and uniformizer/base-normalized condition exponents.
 * Exact additive characters, real Haar volumes/integration, finite Fourier
   transforms and compactly supported locally constant functions on Qp with
   rational/cyclotomic source values; exact inversion, Parseval and convolution.
@@ -57,8 +60,9 @@ Next mathematical features
 2. Higher-degree unramified/Eisenstein extensions and certified changes of
    ramified power basis. Both degree-two field engines already propagate
    ideal precision; formal coefficient algebras retain their wider scope.
-3. Singular Hensel lifting, general polynomial factorization, matrix solvers
-   with condition-aware precision and optional accelerated arithmetic backends.
+3. Singular Hensel lifting, general polynomial factorization, rectangular
+   matrix/kernel/rank algorithms with precision certificates, optimal lattice
+   precision and optional sparse/accelerated arithmetic backends.
 4. General Dirichlet characters, the removable s=1 limits of nonprincipal
    branches, p-adic gamma/polylogarithms and larger-prime zeta algorithms.
 5. Theta1/theta2 with explicit fractional-power choices, lattice theta series

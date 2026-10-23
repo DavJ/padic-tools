@@ -55,6 +55,7 @@ across packages: the prime, branch and Euler factor must match.
    Symbolic algebra <symbolic>
    Algebraic bridges <bridges>
    Chosen local places <local_bridges>
+   Matrices and linear systems <linalg>
    Architecture <architecture>
    Roadmap <roadmap>
    References <references>

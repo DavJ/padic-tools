@@ -31,6 +31,8 @@ Architecture and contribution guide
      - Scalar-generic quadratic, quaternion and diagonal Clifford algebras
    * - ``bridges``
      - Common exact sources, chosen Gaussian local places, scalar base changes and complex evaluation
+   * - ``linalg``
+     - Immutable exact/local matrices, division-free determinants, certified complete pivoting and condition exponents
 
 The first four modules depend only on Python's standard library. Importing
 ``padic_tools`` does not import SymPy, mpmath or Sphinx. Exact rational
@@ -74,6 +76,13 @@ algebraic and does not make that extra analytic claim.
 central Gaussian generator. Its ``local`` adapters use absolute target
 uniformizer precision; see :doc:`local_bridges`. Sparse missing Clifford
 blades are exact zero; stored local zero balls retain finite uncertainty.
+
+The :doc:`linalg` solver uses only certified commutative fields and exact
+Q/Q[i]. A local matrix is a product of entry balls. Its complete-pivot
+test includes lower bounds of zero-containing entries, so unresolved zeros
+cannot be skipped. Successful solves enclose whole-input families; condition
+exponents are separate from actual entrywise output precision. Determinants
+use a division-free recurrence and need no invertibility certificate.
 
 Validation commands
 -------------------
